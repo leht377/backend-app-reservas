@@ -16,6 +16,7 @@ interface RestauranteDocument extends Document {
   dias_servicio?: DiasServicioRestaurante[]
   url_fotos_restaurantes?: string[]
   url_fotos_instalacciones?: string[]
+  fechas_bloqueadas_reservas?: Date[]
 }
 
 const restauranteSchema = new Schema<RestauranteDocument>({
@@ -34,6 +35,9 @@ const restauranteSchema = new Schema<RestauranteDocument>({
   },
   dias_servicio: {
     type: [{ type: String, enum: Object.values(DiasServicioRestaurante) }]
+  },
+  fechas_bloqueadas_reservas: {
+    type: [{ type: Date }]
   }
 })
 
