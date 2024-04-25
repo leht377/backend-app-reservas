@@ -1,4 +1,5 @@
 import express from 'express'
+import { logger } from '../common/utils'
 
 interface Options {
   port?: number
@@ -16,7 +17,7 @@ export class Server {
   async start() {
     this.app.use(express.json())
     this.app.listen(this.port, () => {
-      console.log(`Server is running on port ${this.port}`)
+      logger.log(`Server is running on port ${this.port}`)
     })
   }
 }
