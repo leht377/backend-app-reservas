@@ -1,6 +1,7 @@
 import express, { Router } from 'express'
 import { logger } from '../common/utils'
 import { RequesLoggerMiddleware } from './middlewares/request_logger.middleware'
+import { ErrorHandlerMiddleware } from './middlewares/error_handler.middleware'
 
 interface Options {
   port?: number
@@ -22,6 +23,7 @@ export class Server {
     this.app.use(express.json())
     this.app.use(RequesLoggerMiddleware.LogerRequest())
     this.app.use(this.routes)
+
     this.app.listen(this.port, () => {
       logger.log(`Server is running on port ${this.port}`)
     })

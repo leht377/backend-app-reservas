@@ -2,20 +2,20 @@ import mongoose, { Schema, Document } from 'mongoose'
 import { UsuarioRol } from '../../../common/utils'
 
 interface UsuarioDocument extends Document {
-  usuario: string
+  correo: string
   contrasena: string
   rol: UsuarioRol
 }
 
 const usuarioSchema = new Schema<UsuarioDocument>({
-  usuario: {
-    type: String,
-    required: true
-  },
-  contrasena: {
+  correo: {
     type: String,
     required: true,
     unique: true
+  },
+  contrasena: {
+    type: String,
+    required: true
   },
   rol: {
     type: String,
@@ -24,10 +24,6 @@ const usuarioSchema = new Schema<UsuarioDocument>({
   }
 })
 
-const UsuarioModel = mongoose.model<UsuarioDocument>(
-  'Usuario',
-  usuarioSchema,
-  'usuarios'
-)
+const UsuarioModel = mongoose.model<UsuarioDocument>('Usuario', usuarioSchema, 'usuarios')
 
 export { UsuarioModel, UsuarioDocument }
