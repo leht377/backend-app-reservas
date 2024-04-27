@@ -1,15 +1,13 @@
-import { CrearUsuarioDto, UsuarioDataSource, UsuarioEntity, UsuarioRepository } from '../../domain'
+import {
+  RegistrarUsuarioDto,
+  UsuarioDataSource,
+  UsuarioEntity,
+  UsuarioRepository
+} from '../../domain'
 
 export class UsuarioRepositoryImpl implements UsuarioRepository {
   constructor(private readonly usuarioDataSource: UsuarioDataSource) {}
-
-  crearUsuario(
-    crearUsuarioDto: CrearUsuarioDto,
-    session: unknown = undefined
-  ): Promise<UsuarioEntity> {
-    return this.usuarioDataSource.crearUsuario(crearUsuarioDto, session)
-  }
-  obetenerUsuarioPorId(id: string): Promise<UsuarioEntity> {
-    throw new Error('Method not implemented.')
+  registrarUsuario(registrarUsuarioDto: RegistrarUsuarioDto): Promise<UsuarioEntity> {
+    return this.usuarioDataSource.registrarUsuario(registrarUsuarioDto)
   }
 }

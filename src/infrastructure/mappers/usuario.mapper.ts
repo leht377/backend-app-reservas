@@ -1,15 +1,12 @@
 import { CustomErrors, UsuarioEntity } from '../../domain'
 
 export class UsuarioMapper {
-  static userEntityFromObject(object: { [key: string]: any }) {
-    const { _id, id, correo, rol } = object
-
-    if (!_id && !id) throw CustomErrors.badRequest('El ID es requerido.')
-
-    const usuarioId = _id || id
-
-    if (!correo || !rol) throw CustomErrors.badRequest('Correo y rol son requeridos.')
-
-    return new UsuarioEntity(usuarioId, correo, rol)
+  static UsuarioEntityFromObject(object: { [key: string]: any }): UsuarioEntity {
+    const { _id, id, rol, correo, contrasena } = object
+    const usuario_id = _id || id
+    if (!usuario_id) throw CustomErrors.internalServer('id del usuario perdido')
+    if (!rol) throw CustomErrors.internalServer('rol del usuario perdido')
+    if (!correo) throw CustomErrors.internalServer('correo del usuario perdido')
+    return new UsuarioEntity(usuario_id, rol, correo)
   }
 }

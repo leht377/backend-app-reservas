@@ -1,22 +1,14 @@
 import {
+  ClienteDataSource,
   ClienteEntity,
   ClienteRepository,
-  CrearClienteDto,
-  UsuarioEntity,
-  clienteDataSource
+  RegistrarClienteDto
 } from '../../domain'
 
 export class ClienteRepositoryImpl implements ClienteRepository {
-  constructor(private readonly clienteDataSource: clienteDataSource) {}
+  constructor(private readonly clienteDatasource: ClienteDataSource) {}
 
-  crearCliente(
-    crearClienteDto: CrearClienteDto,
-    usuarioEntity: UsuarioEntity,
-    session: unknown = undefined
-  ): Promise<ClienteEntity> {
-    return this.clienteDataSource.crearCliente(crearClienteDto, usuarioEntity, session)
-  }
-  obtenerClientes(): Promise<ClienteEntity[]> {
-    throw new Error('Method not implemented.')
+  registrarCliente(registrarClienteDto: RegistrarClienteDto): Promise<ClienteEntity> {
+    return this.clienteDatasource.registrarCliente(registrarClienteDto)
   }
 }

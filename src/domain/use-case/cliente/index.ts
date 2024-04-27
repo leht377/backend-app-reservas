@@ -1,1 +1,1 @@
-export * from './crear_cliente.usecase'
+export * from './resgistrar-cliente.usecase'

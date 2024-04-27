@@ -1,18 +1,17 @@
-import { ClienteEntity, CustomErrors } from '../../domain'
+import { ClienteEntity, CustomErrors, UsuarioEntity } from '../../domain'
 
-export class ClienteMapper {
-  static clienteEntityFromObject(object: { [key: string]: any }) {
-    const { _id, id, nombre, apellido, restaurantes_favoritos_ids, correo, rol } = object
-
+export class clienteMapper {
+  static ClienteEntityFromObject(object: { [key: string]: any }): ClienteEntity {
+    const { _id, id, usuario_id, nombre, apellido, restaurantes_favoritos_ids } = object
     const cliente_id = _id || id
-    if (!cliente_id) throw CustomErrors.badRequest('id perdido')
-    if (!nombre) throw CustomErrors.badRequest('nombre perdido')
-    if (!apellido) throw CustomErrors.badRequest('apellido perdido')
-    if (!restaurantes_favoritos_ids)
-      throw CustomErrors.badRequest('restaurantes_favoritos_ids perdido')
-    if (!correo) throw CustomErrors.badRequest('correo perdido')
-    if (!rol) throw CustomErrors.badRequest('rol perdido')
 
-    return new ClienteEntity(cliente_id, nombre, apellido, restaurantes_favoritos_ids, correo, rol)
+    if (!cliente_id) throw CustomErrors.internalServer('id del cliente perdido')
+    if (!nombre) throw CustomErrors.internalServer('rol del cliente perdido')
+    if (!apellido) throw CustomErrors.internalServer('apellido del cliente perdido')
+    if (!usuario_id) throw CustomErrors.internalServer('usuario_id del cliente perdido')
+    if (!restaurantes_favoritos_ids)
+      throw CustomErrors.internalServer('restaurantes_favoritos_ids del cliente perdido')
+
+    return new ClienteEntity(cliente_id, usuario_id, nombre, apellido, restaurantes_favoritos_ids)
   }
 }

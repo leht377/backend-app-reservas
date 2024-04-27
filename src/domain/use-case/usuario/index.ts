@@ -1,1 +1,1 @@
-export * from './crear_usuario.usecase'
+export * from './registrar-usuario.usecase'

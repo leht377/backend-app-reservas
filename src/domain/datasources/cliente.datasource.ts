@@ -1,11 +1,6 @@
-import { CrearClienteDto } from '../dtos'
-import { ClienteEntity, UsuarioEntity } from '../entities'
+import { RegistrarClienteDto } from '../dtos/cliente/registrar-cliente.dto'
+import { ClienteEntity } from '../entities'
 
-export abstract class clienteDataSource {
-  abstract crearCliente(
-    crearClienteDto: CrearClienteDto,
-    usuarioEntity: UsuarioEntity,
-    session: any
-  ): Promise<ClienteEntity>
-  abstract obtenersClientes(): Promise<ClienteEntity>
+export abstract class ClienteDataSource {
+  abstract registrarCliente(registrarClienteDto: RegistrarClienteDto): Promise<ClienteEntity>
 }
