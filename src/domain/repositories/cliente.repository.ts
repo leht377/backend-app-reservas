@@ -1,5 +1,5 @@
 import { RegistrarClienteDto } from '../dtos/cliente/registrar-cliente.dto'
-import { ClienteEntity } from '../entities'
+import { ClienteDetalladoEntity, ClienteEntity } from '../entities'
 import { OptionsRegistrarCliente } from '../interfaces'
 
 export abstract class ClienteRepository {
@@ -7,4 +7,6 @@ export abstract class ClienteRepository {
     registrarClienteDto: RegistrarClienteDto,
     options?: OptionsRegistrarCliente
   ): Promise<ClienteEntity>
+
+  abstract obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity>
 }

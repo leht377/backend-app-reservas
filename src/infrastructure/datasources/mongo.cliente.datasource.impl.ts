@@ -1,14 +1,25 @@
 import { ClienteModel } from '../../data/mongodb'
 import {
   ClienteDataSource,
+  ClienteDetalladoEntity,
   ClienteEntity,
   CustomErrors,
   OptionsRegistrarCliente,
   RegistrarClienteDto
 } from '../../domain'
-import { clienteMapper } from '../mappers'
-import mongoose, { ClientSession } from 'mongoose'
+import { ClienteMapper } from '../mappers'
+import mongoose, { ClientSession, isValidObjectId } from 'mongoose'
 export class MongoClienteDatasourceImpl implements ClienteDataSource {
+  //
+  async obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity> {
+    if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id no es valido')
+
+    const cliente = await ClienteModel.findById(id).populate('usuario_id')
+    if (!cliente) throw CustomErrors.badRequest(`No existe ningun cliente asociado al id ${id}`)
+
+    return ClienteMapper.ClienteDetalladoEntityFromObject(cliente.toObject())
+  }
+
   async registrarCliente(
     registrarClienteDto: RegistrarClienteDto,
     options?: OptionsRegistrarCliente | undefined
@@ -20,7 +31,7 @@ export class MongoClienteDatasourceImpl implements ClienteDataSource {
       const cliente = new ClienteModel(registrarClienteDto)
       const clienteCreado = await cliente.save({ session })
 
-      return clienteMapper.ClienteEntityFromObject(clienteCreado.toObject())
+      return ClienteMapper.ClienteEntityFromObject(clienteCreado.toObject())
     } catch (error: any) {
       if (error instanceof mongoose.Error.ValidationError)
         throw CustomErrors.badRequest(error.message)
