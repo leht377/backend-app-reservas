@@ -4,6 +4,7 @@ import { UsuarioRepositoryImpl } from '../../infrastructure/repositories/usuario
 import { MongoUsuarioDataSourceImpl } from '../../infrastructure/datasources/mongo.usuario.datasource.impl'
 import { MongoClienteDatasourceImpl } from '../../infrastructure/datasources/mongo.cliente.datasource.impl'
 import { ClienteRepositoryImpl } from '../../infrastructure/repositories/cliente.repository.impl'
+import { MongoTransationManagerImpl } from '../../infrastructure/transations/mongo.trasation.manager'
 
 export class AuthRoutes {
   static get routes(): Router {
@@ -15,7 +16,8 @@ export class AuthRoutes {
     const clienteDatasource = new MongoClienteDatasourceImpl()
     const clienteRepository = new ClienteRepositoryImpl(clienteDatasource)
 
-    const controller = new AuthController(usuarioRepository, clienteRepository)
+    const transationManager = new MongoTransationManagerImpl()
+    const controller = new AuthController(usuarioRepository, clienteRepository, transationManager)
 
     router.post('/login', controller.login)
     router.post('/registrar/clientes', controller.registrarCliente)

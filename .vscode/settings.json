@@ -11,6 +11,8 @@
     "/src/domain/use-case/cliente",
     "/src/domain/use-case/auth",
     "/src/domain/use-case/usuario",
-    "/src/infrastructure/mappers"
+    "/src/infrastructure/mappers",
+    "/src/domain/transations",
+    "/src/domain/interfaces"
   ]
 }

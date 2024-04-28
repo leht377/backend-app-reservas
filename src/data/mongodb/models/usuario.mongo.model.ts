@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose'
 import { UsuarioRol } from '../../../common/utils'
-
+import uniqueValidator from 'mongoose-unique-validator'
 interface UsuarioDocument extends Document {
   correo: string
   contrasena: string
@@ -23,7 +23,7 @@ const usuarioSchema = new Schema<UsuarioDocument>({
     required: true
   }
 })
-
+usuarioSchema.plugin(uniqueValidator)
 const UsuarioModel = mongoose.model<UsuarioDocument>('Usuario', usuarioSchema, 'usuarios')
 
 export { UsuarioModel, UsuarioDocument }

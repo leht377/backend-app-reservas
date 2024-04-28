@@ -1,4 +1,5 @@
 import {
+  OptionsRegistrarUsuario,
   RegistrarUsuarioDto,
   UsuarioDataSource,
   UsuarioEntity,
@@ -7,7 +8,10 @@ import {
 
 export class UsuarioRepositoryImpl implements UsuarioRepository {
   constructor(private readonly usuarioDataSource: UsuarioDataSource) {}
-  registrarUsuario(registrarUsuarioDto: RegistrarUsuarioDto): Promise<UsuarioEntity> {
-    return this.usuarioDataSource.registrarUsuario(registrarUsuarioDto)
+  registrarUsuario(
+    registrarUsuarioDto: RegistrarUsuarioDto,
+    options?: OptionsRegistrarUsuario | undefined
+  ): Promise<UsuarioEntity> {
+    return this.usuarioDataSource.registrarUsuario(registrarUsuarioDto, options)
   }
 }

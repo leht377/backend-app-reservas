@@ -5,7 +5,10 @@ import { UsuarioRepository } from '../../repositories'
 
 export class RegistrarUsuario {
   constructor(private readonly usuarioRepository: UsuarioRepository) {}
-  async execute(registrarUsuarioDto: RegistrarUsuarioDto): Promise<UsuarioEntity> {
+  async execute(
+    registrarUsuarioDto: RegistrarUsuarioDto,
+    session?: unknown
+  ): Promise<UsuarioEntity> {
     const hashPassword = BcryptAdapter.hash(registrarUsuarioDto.contrasena)
 
     const registrarUsuarioHasPasswordDto = RegistrarUsuarioDto.crear({
@@ -13,7 +16,9 @@ export class RegistrarUsuario {
       contrasena: hashPassword
     })
 
-    const usuario = await this.usuarioRepository.registrarUsuario(registrarUsuarioHasPasswordDto)
+    const usuario = await this.usuarioRepository.registrarUsuario(registrarUsuarioHasPasswordDto, {
+      session
+    })
     return usuario
   }
 }

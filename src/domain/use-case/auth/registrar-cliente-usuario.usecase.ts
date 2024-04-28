@@ -16,6 +16,7 @@ interface UserToken {
 }
 
 type SignToken = (payload: Object, duration?: string) => Promise<string | null>
+// type TransationManager = (fn: (session: any) => Promise<any>) => Promise<void>
 
 export class RegistrarClienteUsuario {
   constructor(
@@ -23,27 +24,38 @@ export class RegistrarClienteUsuario {
     private readonly clienteRepository: ClienteRepository,
     private readonly signToken: SignToken = JwtAdapter.generateToken
   ) {}
-  async execute(registrarClienteUsuarioDto: RegistrarClienteUsuarioDto): Promise<UserToken> {
+
+  async execute(
+    registrarClienteUsuarioDto: RegistrarClienteUsuarioDto,
+    session?: unknown
+  ): Promise<UserToken> {
     const registrarUsuarioDto = RegistrarUsuarioDto.crear({
       ...registrarClienteUsuarioDto,
       rol: UsuarioRol.CLIENTE
     })
 
-    const usuario = await new RegistrarUsuario(this.usuarioRepository).execute(registrarUsuarioDto)
+    const usuario = await new RegistrarUsuario(this.usuarioRepository).execute(
+      registrarUsuarioDto,
+      session
+    )
 
     const registrarClienteDto = RegistrarClienteDto.crear({
       ...registrarClienteUsuarioDto,
       usuario_id: usuario?.id
     })
-    const cliente = await new RegistrarCliente(this.clienteRepository).execute(registrarClienteDto)
+
+    const cliente = await new RegistrarCliente(this.clienteRepository).execute(
+      registrarClienteDto,
+      session
+    )
 
     const token = await this.signToken({
       correo: usuario?.correo,
       usuario_id: usuario?.id,
       id: cliente?.id
     })
-    if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
 
+    if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
     return {
       token: token,
       usuario: {

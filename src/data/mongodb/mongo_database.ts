@@ -12,6 +12,7 @@ export class MongoDatabase {
       await mongoose.connect(mongoUrl, {
         dbName: dbName
       })
+
       logger.log('Mongo connected')
     } catch (error) {
       logger.log(`Error conection DB ${error}`)

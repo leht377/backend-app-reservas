@@ -5,8 +5,11 @@ import { ClienteRepository } from '../../repositories'
 export class RegistrarCliente {
   constructor(private readonly clienteRepository: ClienteRepository) {}
 
-  async execute(registrarClienteDto: RegistrarClienteDto): Promise<ClienteEntity> {
-    const cliente = await this.clienteRepository.registrarCliente(registrarClienteDto)
+  async execute(
+    registrarClienteDto: RegistrarClienteDto,
+    session?: unknown
+  ): Promise<ClienteEntity> {
+    const cliente = await this.clienteRepository.registrarCliente(registrarClienteDto, { session })
     return cliente
   }
 }
