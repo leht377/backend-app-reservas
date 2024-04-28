@@ -41,7 +41,7 @@ export class RegistrarClienteUsuario {
 
     const registrarClienteDto = RegistrarClienteDto.crear({
       ...registrarClienteUsuarioDto,
-      usuario_id: usuario?.id
+      usuario_id: usuario?.getId()
     })
 
     const cliente = await new RegistrarCliente(this.clienteRepository).execute(
@@ -50,18 +50,18 @@ export class RegistrarClienteUsuario {
     )
 
     const token = await this.signToken({
-      correo: usuario?.correo,
-      usuario_id: usuario?.id,
-      id: cliente?.id
+      correo: usuario?.getCorreo(),
+      usuario_id: usuario?.getId(),
+      id: cliente?.getId()
     })
 
     if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
     return {
       token: token,
       usuario: {
-        id: usuario.id,
-        correo: usuario.correo,
-        rol: usuario.rol
+        id: usuario.getId(),
+        correo: usuario.getCorreo(),
+        rol: usuario.getRol()
       }
     }
   }
