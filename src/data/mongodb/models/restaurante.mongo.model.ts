@@ -1,8 +1,5 @@
 import mongoose, { Schema, Types, Document } from 'mongoose'
-import {
-  HorasServicioRestaurante,
-  DiasServicioRestaurante
-} from '../../../common/utils'
+import { HorasServicioRestaurante, DiasServicioRestaurante } from '../../../common/utils'
 
 interface RestauranteDocument extends Document {
   usuario_id: Types.ObjectId
@@ -20,7 +17,7 @@ interface RestauranteDocument extends Document {
 }
 
 const restauranteSchema = new Schema<RestauranteDocument>({
-  usuario_id: { type: Schema.ObjectId, required: true },
+  usuario_id: { type: Schema.ObjectId, required: true, ref: 'Usuario' },
   menu_id: { type: Schema.ObjectId },
   nombre: { type: String, required: true },
   locacion: { type: String, required: true },
