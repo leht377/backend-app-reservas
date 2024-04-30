@@ -16,7 +16,9 @@ export class RegistrarUsuarioDto {
     if (!validators.email.test(correo)) throw CustomErrors.badRequest('Correo no valido')
     if (!contrasena) throw CustomErrors.badRequest('La contraseña es requerida')
     if (contrasena?.length < 5) throw CustomErrors.badRequest('La contraseña es demasiado corta')
-    // if (rol)
+    if (!rol) throw CustomErrors.badRequest('La contraseña es demasiado corta')
+    if (rol != UsuarioRol.CLIENTE && rol != UsuarioRol.RESTAURANTE)
+      throw CustomErrors.badRequest(`El rol ${rol} no es valido`)
     return new RegistrarUsuarioDto(correo, contrasena, rol)
   }
 }

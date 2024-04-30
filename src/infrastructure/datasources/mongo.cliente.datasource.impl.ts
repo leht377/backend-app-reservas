@@ -13,10 +13,8 @@ export class MongoClienteDatasourceImpl implements ClienteDataSource {
   //
   async obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity> {
     if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id no es valido')
-
     const cliente = await ClienteModel.findById(id).populate('usuario_id')
     if (!cliente) throw CustomErrors.badRequest(`No existe ningun cliente asociado al id ${id}`)
-
     return ClienteMapper.ClienteDetalladoEntityFromObject(cliente.toObject())
   }
 

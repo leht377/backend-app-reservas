@@ -13,6 +13,7 @@
     "/src/domain/use-case/usuario",
     "/src/infrastructure/mappers",
     "/src/domain/transations",
-    "/src/domain/interfaces"
+    "/src/domain/interfaces",
+    "/src/domain/use-case/restaurante"
   ]
 }
