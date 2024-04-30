@@ -1,4 +1,4 @@
-import { CustomErrors, RestauranteEntity } from '../../domain'
+import { CustomErrors, RestauranteDetalladoEntity, RestauranteEntity } from '../../domain'
 
 export class RestauranteMapper {
   static RestauranteEntityFromObject(object: { [key: string]: any }): RestauranteEntity {
@@ -54,6 +54,36 @@ export class RestauranteMapper {
       url_fotos_instalacciones,
       fechas_bloqueadas_reservas,
       menu_id
+    )
+  }
+  static RestauranteDetalladoEntityFromObject(object: {
+    [key: string]: any
+  }): RestauranteDetalladoEntity {
+    const { usuario_id, ...restObj } = object
+    const { rol, correo, id, _id } = usuario_id
+    const idUsuario = _id || id
+
+    if (!rol) throw CustomErrors.internalServer('rol del resturante perdido')
+    if (!correo) throw CustomErrors.internalServer('correo del restaurante perdido')
+
+    const restaurante = this.RestauranteEntityFromObject({ ...restObj, usuario_id: idUsuario })
+
+    return new RestauranteDetalladoEntity(
+      restaurante.getId(),
+      idUsuario,
+      restaurante.getNombre(),
+      restaurante.getDescripcion(),
+      restaurante.getCalificacion(),
+      restaurante.getCantidadResenas(),
+      restaurante.getLocacion(),
+      restaurante.getHorasServicio(),
+      restaurante.getDiasServicio(),
+      restaurante.getUrlFotoRestaurante(),
+      restaurante.getUrlFotosInstalaciones(),
+      restaurante.getFechasBloqueadasReservas(),
+      rol,
+      correo,
+      restaurante.getMenuId()
     )
   }
 }

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { CustomMiddleware, ErrorHandlerMiddleware } from './middlewares'
 import { AuthRoutes } from './auth'
 import { ClienteRoutes } from './cliente/routes'
+import { RestauranteRoutes } from './restaurante/routes'
 
 export class AppRoutes {
   static get routes(): Router {
@@ -9,6 +10,7 @@ export class AppRoutes {
 
     routes.use('/api/auth', AuthRoutes.routes)
     routes.use('/api/clientes', ClienteRoutes.routes)
+    routes.use('/api/restaurantes/', RestauranteRoutes.routes)
 
     routes.use(CustomMiddleware.UnknowEnpoint)
     routes.use(ErrorHandlerMiddleware.ErrorHandler)
