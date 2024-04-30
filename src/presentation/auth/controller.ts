@@ -1,12 +1,20 @@
 import { NextFunction, Request, Response } from 'express'
-import { RegistrarClienteUsuarioDto, RegistrarRestauranteUsuarioDto } from '../../domain/dtos'
+import {
+  LoginUsuarioDto,
+  RegistrarClienteUsuarioDto,
+  RegistrarRestauranteUsuarioDto
+} from '../../domain/dtos'
 
 import {
   ClienteRepository,
   RestauranteRepository,
   UsuarioRepository
 } from '../../domain/repositories'
-import { RegistrarClienteUsuario, RegistrarRestauranteUsuario } from '../../domain/use-case/auth'
+import {
+  LoginUsuario,
+  RegistrarClienteUsuario,
+  RegistrarRestauranteUsuario
+} from '../../domain/use-case/auth'
 import { TransationManager } from '../../domain/transations'
 
 export class AuthController {
@@ -48,5 +56,17 @@ export class AuthController {
       next(error)
     }
   }
-  login = (req: Request, res: Response, next: NextFunction) => {}
+  login = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const loginUsuarioDto = LoginUsuarioDto.crear(req.body)
+      const token = await new LoginUsuario(
+        this.usuarioRepository,
+        this.restauranteRepository,
+        this.clienteRepository
+      ).execute(loginUsuarioDto)
+      res.json(token)
+    } catch (error) {
+      next(error)
+    }
+  }
 }

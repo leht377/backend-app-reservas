@@ -8,6 +8,9 @@ import { RegistrarRestauranteDto } from '../../domain/dtos/restaurante/registrar
 
 export class RestauranteRepositoryImpl implements RestauranteRepository {
   constructor(private readonly restauranteDataSource: RestauranteDataSource) {}
+  obtenerRestaurantePorUsuarioId(id: string): Promise<RestauranteDetalladoEntity | null> {
+    return this.restauranteDataSource.obtenerRestaurantePorUsuarioId(id)
+  }
   obtenerRestaurantePorId(id: string): Promise<RestauranteDetalladoEntity> {
     return this.restauranteDataSource.obtenerRestaurantePorId(id)
   }

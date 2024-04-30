@@ -11,6 +11,17 @@ import { RestauranteDocument, RestuaranteModelo } from '../../data'
 import { RestauranteMapper } from '../mappers'
 
 export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
+  async obtenerRestaurantePorUsuarioId(id: string): Promise<RestauranteDetalladoEntity | null> {
+    if (!isValidObjectId(id)) throw CustomErrors.badRequest(`El id:${id} no es valido`)
+
+    const restaurante: RestauranteDocument | null = await RestuaranteModelo.findOne({
+      usuario_id: id
+    }).populate('usuario_id')
+
+    if (!restaurante) return null
+    return RestauranteMapper.RestauranteDetalladoEntityFromObject(restaurante.toObject())
+  }
+
   async obtenerRestaurantePorId(id: string): Promise<RestauranteDetalladoEntity> {
     if (!isValidObjectId(id)) throw CustomErrors.badRequest(`El id:${id} no es valido`)
 

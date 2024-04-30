@@ -7,4 +7,6 @@ export abstract class UsuarioRepository {
     registrarUsuarioDto: RegistrarUsuarioDto,
     options?: OptionsRegistrarUsuario
   ): Promise<UsuarioEntity>
+
+  abstract obtenerUsuarioPorCorreo(correo: string): Promise<UsuarioEntity | null>
 }

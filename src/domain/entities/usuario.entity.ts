@@ -1,5 +1,10 @@
 export class UsuarioEntity {
-  constructor(private readonly id: string, private rol: string, private correo: string) {}
+  constructor(
+    private readonly id: string,
+    private rol: string,
+    private correo: string,
+    private readonly constrasenaHash?: string
+  ) {}
   getId(): string {
     return this.id
   }
@@ -10,5 +15,9 @@ export class UsuarioEntity {
 
   getCorreo(): string {
     return this.correo
+  }
+
+  getContrasenaHash(): string | undefined {
+    return this.constrasenaHash
   }
 }

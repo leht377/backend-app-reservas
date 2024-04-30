@@ -7,6 +7,6 @@ export class UsuarioMapper {
     if (!usuario_id) throw CustomErrors.internalServer('id del usuario perdido')
     if (!rol) throw CustomErrors.internalServer('rol del usuario perdido')
     if (!correo) throw CustomErrors.internalServer('correo del usuario perdido')
-    return new UsuarioEntity(usuario_id, rol, correo)
+    return new UsuarioEntity(usuario_id, rol, correo, contrasena)
   }
 }

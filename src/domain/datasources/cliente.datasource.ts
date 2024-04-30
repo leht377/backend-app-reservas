@@ -9,4 +9,5 @@ export abstract class ClienteDataSource {
   ): Promise<ClienteEntity>
 
   abstract obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity>
+  abstract obtenerClientePorUsuarioId(id: string): Promise<ClienteDetalladoEntity | null>
 }

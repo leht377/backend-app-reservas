@@ -10,6 +10,12 @@ import {
 import { ClienteMapper } from '../mappers'
 import mongoose, { ClientSession, isValidObjectId } from 'mongoose'
 export class MongoClienteDatasourceImpl implements ClienteDataSource {
+  async obtenerClientePorUsuarioId(id: string): Promise<ClienteDetalladoEntity | null> {
+    if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id no es valido')
+    const cliente = await ClienteModel.findOne({ usuario_id: id }).populate('usuario_id')
+    if (!cliente) return null
+    return ClienteMapper.ClienteDetalladoEntityFromObject(cliente.toObject())
+  }
   //
   async obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity> {
     if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id no es valido')

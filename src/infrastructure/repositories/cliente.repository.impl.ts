@@ -9,6 +9,9 @@ import {
 
 export class ClienteRepositoryImpl implements ClienteRepository {
   constructor(private readonly clienteDatasource: ClienteDataSource) {}
+  obtenerClientePorUsuarioId(id: string): Promise<ClienteDetalladoEntity | null> {
+    return this.clienteDatasource.obtenerClientePorUsuarioId(id)
+  }
   obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity> {
     return this.clienteDatasource.obtenerClientePorId(id)
   }

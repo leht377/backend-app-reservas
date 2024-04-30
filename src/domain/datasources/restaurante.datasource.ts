@@ -9,4 +9,5 @@ export abstract class RestauranteDataSource {
   ): Promise<RestauranteEntity>
 
   abstract obtenerRestaurantePorId(id: string): Promise<RestauranteDetalladoEntity>
+  abstract obtenerRestaurantePorUsuarioId(id: string): Promise<RestauranteDetalladoEntity | null>
 }
