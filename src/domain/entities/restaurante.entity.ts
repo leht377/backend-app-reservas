@@ -3,6 +3,7 @@ export class RestauranteEntity {
     private readonly id: string,
     private readonly usuario_id: string,
     private nombre: string,
+    private visible: boolean,
     private descripcion: string,
     private calificacion: number,
     private cantidad_resenas: number,
@@ -17,6 +18,10 @@ export class RestauranteEntity {
 
   getId(): string {
     return this.id
+  }
+
+  getVisible(): boolean {
+    return this.visible
   }
 
   getUsuarioId(): string {

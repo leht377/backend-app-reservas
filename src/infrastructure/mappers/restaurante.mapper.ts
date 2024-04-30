@@ -6,6 +6,7 @@ export class RestauranteMapper {
       _id,
       id,
       usuario_id,
+      visible,
       menu_id,
       nombre,
       descripcion,
@@ -24,6 +25,7 @@ export class RestauranteMapper {
     if (!usuario_id) throw CustomErrors.internalServer('usuario_id del restaurante perdido')
     // if (!menu_id) throw CustomErrors.internalServer('menu_id del restaurante perdido')
     if (!nombre) throw CustomErrors.internalServer('nombre del restaurante perdido')
+    if (visible === undefined) throw CustomErrors.internalServer('visible del restaurante perdido')
     if (descripcion != '' && !descripcion)
       throw CustomErrors.internalServer('descripcion del restaurante perdido')
     if (calificacion != 0 && !calificacion)
@@ -44,6 +46,7 @@ export class RestauranteMapper {
       restaurante_id,
       usuario_id,
       nombre,
+      visible,
       descripcion,
       calificacion,
       cantidad_resenas,
@@ -72,6 +75,7 @@ export class RestauranteMapper {
       restaurante.getId(),
       idUsuario,
       restaurante.getNombre(),
+      restaurante.getVisible(),
       restaurante.getDescripcion(),
       restaurante.getCalificacion(),
       restaurante.getCantidadResenas(),

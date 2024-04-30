@@ -1,5 +1,6 @@
 import mongoose, { Schema, Types, Document } from 'mongoose'
 import { HorasServicioRestaurante, DiasServicioRestaurante } from '../../../common/utils'
+import paginate from 'mongoose-paginate-v2'
 
 interface RestauranteDocument extends Document {
   usuario_id: Types.ObjectId
@@ -9,6 +10,7 @@ interface RestauranteDocument extends Document {
   calificacion?: number
   cantidad_resenas?: number
   locacion: string
+  visible: boolean
   horas_servicio?: HorasServicioRestaurante[]
   dias_servicio?: DiasServicioRestaurante[]
   url_fotos_restaurantes?: string[]
@@ -21,7 +23,7 @@ const restauranteSchema = new Schema<RestauranteDocument>({
   menu_id: { type: Schema.ObjectId },
   nombre: { type: String, required: true },
   locacion: { type: String, required: true },
-
+  visible: { type: Boolean, default: false },
   descripcion: { type: String, default: '' },
   calificacion: { type: Number, default: 0 },
   cantidad_resenas: { type: Number, default: 0 },
@@ -38,10 +40,10 @@ const restauranteSchema = new Schema<RestauranteDocument>({
   }
 })
 
-const RestuaranteModelo = mongoose.model<RestauranteDocument>(
-  'Restaurante',
-  restauranteSchema,
-  'restaurantes'
-)
+restauranteSchema.plugin(paginate)
+const RestuaranteModelo = mongoose.model<
+  RestauranteDocument,
+  mongoose.PaginateModel<RestauranteDocument>
+>('Restaurante', restauranteSchema, 'restaurantes')
 
 export { RestauranteDocument, RestuaranteModelo }

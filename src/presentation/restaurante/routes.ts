@@ -10,7 +10,9 @@ export class RestauranteRoutes {
     const dataSource = new MongoRestauranteDataSourceImpl()
     const repository = new RestauranteRepositoryImpl(dataSource)
     const controller = new RestauranteController(repository)
+
     router.get('/:id', controller.obtenerRestaurantePorId)
+    router.get('/', controller.obtenerRestaurantes)
     return router
   }
 }

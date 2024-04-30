@@ -8,6 +8,7 @@ export class RestauranteDetalladoEntity extends RestauranteEntity {
     id: string,
     usuario_id: string,
     nombre: string,
+    visible: boolean,
     descripcion: string,
     calificacion: number,
     cantidad_resenas: number,
@@ -24,8 +25,8 @@ export class RestauranteDetalladoEntity extends RestauranteEntity {
     super(
       id,
       usuario_id,
-
       nombre,
+      visible,
       descripcion,
       calificacion,
       cantidad_resenas,

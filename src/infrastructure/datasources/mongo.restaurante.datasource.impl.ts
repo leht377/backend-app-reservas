@@ -1,16 +1,50 @@
-import mongoose, { ClientSession, isValidObjectId } from 'mongoose'
+import mongoose, { ClientSession, PaginateOptions, isValidObjectId } from 'mongoose'
 import {
   CustomErrors,
   OptionsRegistrarRestaurante,
   RestauranteDataSource,
   RestauranteDetalladoEntity,
-  RestauranteEntity
+  RestauranteEntity,
+  RestaurantesConPaginacion,
+  ResultadoPaginado
 } from '../../domain'
 import { RegistrarRestauranteDto } from '../../domain/dtos/restaurante/registrar-restaurante.dto'
 import { RestauranteDocument, RestuaranteModelo } from '../../data'
 import { RestauranteMapper } from '../mappers'
+import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-restaurantes.dto'
 
 export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
+  async obtenerRestaurantes(
+    obtenerRestauranteDto: ObtenerRestauranteDto
+  ): Promise<RestaurantesConPaginacion> {
+    const options: PaginateOptions = {
+      page: obtenerRestauranteDto.page,
+      limit: obtenerRestauranteDto.limit,
+      populate: 'usuario_id'
+    }
+
+    const documentos = await RestuaranteModelo.paginate({ visible: false }, options)
+    const { docs, ...rest } = documentos
+    const restaurantes: RestauranteDocument[] = docs
+
+    let restaurantesEntities = restaurantes.map((restaurante) =>
+      RestauranteMapper.RestauranteDetalladoEntityFromObject(restaurante?.toObject())
+    )
+    const pageInformation: ResultadoPaginado = {
+      hasNextPage: rest?.hasNextPage,
+      hasPrevPage: rest?.hasPrevPage,
+      limit: rest?.limit,
+      nextPage: rest?.nextPage,
+      page: rest?.page,
+      pagingCounter: rest?.pagingCounter,
+      prevPage: rest?.prevPage,
+      totalDocs: rest?.totalDocs,
+      totalPages: rest?.totalPages
+    }
+
+    return { restaurantes: restaurantesEntities, paginacion: pageInformation }
+  }
+
   async obtenerRestaurantePorUsuarioId(id: string): Promise<RestauranteDetalladoEntity | null> {
     if (!isValidObjectId(id)) throw CustomErrors.badRequest(`El id:${id} no es valido`)
 
@@ -33,6 +67,7 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       throw CustomErrors.badRequest(`No existe ningun restaurante identificado con el id ${id}`)
     return RestauranteMapper.RestauranteDetalladoEntityFromObject(restaurante.toObject())
   }
+
   async registrarRestaurante(
     registrarRestauranteDto: RegistrarRestauranteDto,
     options: OptionsRegistrarRestaurante

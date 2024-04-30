@@ -1,6 +1,7 @@
+import { ObtenerRestauranteDto } from '../dtos/restaurante/obtener-restaurantes.dto'
 import { RegistrarRestauranteDto } from '../dtos/restaurante/registrar-restaurante.dto'
 import { RestauranteDetalladoEntity, RestauranteEntity } from '../entities'
-import { OptionsRegistrarRestaurante } from '../interfaces'
+import { OptionsRegistrarRestaurante, RestaurantesConPaginacion } from '../interfaces'
 
 export abstract class RestauranteDataSource {
   abstract registrarRestaurante(
@@ -10,4 +11,7 @@ export abstract class RestauranteDataSource {
 
   abstract obtenerRestaurantePorId(id: string): Promise<RestauranteDetalladoEntity>
   abstract obtenerRestaurantePorUsuarioId(id: string): Promise<RestauranteDetalladoEntity | null>
+  abstract obtenerRestaurantes(
+    obtenerRestauranteDto: ObtenerRestauranteDto
+  ): Promise<RestaurantesConPaginacion>
 }

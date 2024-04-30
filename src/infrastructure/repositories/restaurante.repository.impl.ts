@@ -2,12 +2,19 @@ import {
   RestauranteDataSource,
   RestauranteDetalladoEntity,
   RestauranteEntity,
-  RestauranteRepository
+  RestauranteRepository,
+  RestaurantesConPaginacion
 } from '../../domain'
+import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-restaurantes.dto'
 import { RegistrarRestauranteDto } from '../../domain/dtos/restaurante/registrar-restaurante.dto'
 
 export class RestauranteRepositoryImpl implements RestauranteRepository {
   constructor(private readonly restauranteDataSource: RestauranteDataSource) {}
+  obtenerRestaurantes(
+    obtenerRestauranteDto: ObtenerRestauranteDto
+  ): Promise<RestaurantesConPaginacion> {
+    return this.restauranteDataSource.obtenerRestaurantes(obtenerRestauranteDto)
+  }
   obtenerRestaurantePorUsuarioId(id: string): Promise<RestauranteDetalladoEntity | null> {
     return this.restauranteDataSource.obtenerRestaurantePorUsuarioId(id)
   }
