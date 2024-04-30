@@ -1,23 +1,19 @@
 import { UsuarioRol } from '../../../common/utils'
+import { JwtAdapter } from '../../../common/utils/jwt'
 import { RegistrarRestauranteUsuarioDto, RegistrarUsuarioDto } from '../../dtos'
 import { RegistrarRestauranteDto } from '../../dtos/restaurante/registrar-restaurante.dto'
-import { RestauranteEntity } from '../../entities'
+import { CustomErrors } from '../../errors'
+import { TokenPayload, UserToken } from '../../interfaces'
+
 import { RestauranteRepository, UsuarioRepository } from '../../repositories'
 import { RegistrarRestaurante } from '../restaurante'
 import { RegistrarUsuario } from '../usuario'
-interface UserToken {
-  token: string
-  usuario: {
-    id: string
-    correo: string
-    rol: string
-  }
-}
-
+type SignToken = (payload: TokenPayload, duration?: string) => Promise<string | null>
 export class RegistrarRestauranteUsuario {
   constructor(
     private readonly usuarioRepository: UsuarioRepository,
-    private readonly restauranteRepository: RestauranteRepository
+    private readonly restauranteRepository: RestauranteRepository,
+    private readonly signToken: SignToken = JwtAdapter.generateToken
   ) {}
   async execute(
     resgistrarRestauranteUsuarioDto: RegistrarRestauranteUsuarioDto,
@@ -42,8 +38,18 @@ export class RegistrarRestauranteUsuario {
       registrarRestuaranteDto,
       session
     )
+
+    const tokenPayload: TokenPayload = {
+      correo: usuario?.getCorreo(),
+      usuario_id: usuario?.getId(),
+      id: restaurante?.getId(),
+      rol: usuario.getRol()
+    }
+
+    const token = await this.signToken(tokenPayload)
+    if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
     return {
-      token: 'token',
+      token: token,
       usuario: {
         id: usuario.getId(),
         correo: usuario.getCorreo(),
