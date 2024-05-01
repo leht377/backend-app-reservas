@@ -1,5 +1,6 @@
-import mongoose, { ClientSession, PaginateOptions, isValidObjectId } from 'mongoose'
+import mongoose, { ClientSession, PaginateOptions, UpdateQuery, isValidObjectId } from 'mongoose'
 import {
+  ActualizarRestauranteDto,
   CustomErrors,
   OptionsRegistrarRestaurante,
   RestauranteDataSource,
@@ -14,6 +15,44 @@ import { RestauranteMapper } from '../mappers'
 import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-restaurantes.dto'
 
 export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
+  async actualizarRestaurante(
+    actualizarRestauranteDto: ActualizarRestauranteDto
+  ): Promise<RestauranteDetalladoEntity> {
+    const {
+      id,
+      usuario_id,
+      descripcion,
+      dias_servicios,
+      foto_restaurante,
+      horas_servicios,
+      localizacion,
+      nombre
+    } = actualizarRestauranteDto
+
+    if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id del restaurante no es valido')
+
+    const data: UpdateQuery<RestauranteDocument> = {
+      descripcion: descripcion,
+      dias_servicio: dias_servicios,
+      url_fotos_restaurantes: foto_restaurante,
+      horas_servicio: horas_servicios,
+      locacion: localizacion,
+      nombre: nombre
+    }
+
+    const restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true
+    }).populate('usuario_id')
+
+    if (!restauranteActualizado)
+      throw CustomErrors.badRequest(`No existe ningun restaurante identificado con el id: ${id}`)
+
+    return RestauranteMapper.RestauranteDetalladoEntityFromObject(
+      restauranteActualizado?.toObject()
+    )
+  }
+
   async obtenerRestaurantes(
     obtenerRestauranteDto: ObtenerRestauranteDto
   ): Promise<RestaurantesConPaginacion> {

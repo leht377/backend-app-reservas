@@ -14,6 +14,7 @@
     "/src/infrastructure/mappers",
     "/src/domain/transations",
     "/src/domain/interfaces",
-    "/src/domain/use-case/restaurante"
+    "/src/domain/use-case/restaurante",
+    "/src/domain/dtos/restaurante"
   ]
 }

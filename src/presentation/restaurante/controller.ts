@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
-import { CustomErrors, RestauranteRepository } from '../../domain'
-import { ObtenerRestaurantePorId, ObtenerRestaurantes } from '../../domain/use-case/restaurante'
+import { ActualizarRestauranteDto, CustomErrors, RestauranteRepository } from '../../domain'
+import {
+  ActualizarRestaurante,
+  ObtenerRestaurantePorId,
+  ObtenerRestaurantes
+} from '../../domain/use-case/restaurante'
 import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-restaurantes.dto'
 
 export class RestauranteController {
@@ -27,6 +31,23 @@ export class RestauranteController {
         obtenerRestauranteDto
       )
       res.json(restaurantes)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  actualizarRestaurante = async (req: Request, res: Response, next: NextFunction) => {
+    const restaurante_id = req.params?.id
+    try {
+      const actualizarRestauranteDto = ActualizarRestauranteDto.crear({
+        ...req.body,
+        id: restaurante_id
+      })
+
+      const restaurante = await new ActualizarRestaurante(this.restauranteRepository).execute(
+        actualizarRestauranteDto
+      )
+      res.json(restaurante)
     } catch (error) {
       next(error)
     }
