@@ -1,5 +1,6 @@
 import { ActualizarRestauranteDto, RegistrarMenuDto } from '../../dtos'
 import { MenuEntity } from '../../entities'
+import { CustomErrors } from '../../errors'
 import { MenuRepository, RestauranteRepository } from '../../repositories'
 import { ActualizarRestaurante } from '../restaurante'
 
@@ -9,6 +10,12 @@ export class RegistrarMenu {
     private readonly restauranteRepository: RestauranteRepository
   ) {}
   async execute(registrarMenuDto: RegistrarMenuDto, session?: any): Promise<MenuEntity> {
+    const restaurante = await this.restauranteRepository.obtenerRestaurantePorId(
+      registrarMenuDto.restaurante_id
+    )
+    if (restaurante?.getMenuId())
+      throw CustomErrors.badRequest('El restaurante ya cuenta con un menu')
+
     const menu = await this.menuRepository.registrarMenu(registrarMenuDto, { session: session })
 
     const menu_id = menu.getId()
