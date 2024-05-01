@@ -2,6 +2,7 @@ import mongoose, { ClientSession, PaginateOptions, UpdateQuery, isValidObjectId 
 import {
   ActualizarRestauranteDto,
   CustomErrors,
+  OptionsActualizarRestaurante,
   OptionsRegistrarRestaurante,
   RestauranteDataSource,
   RestauranteDetalladoEntity,
@@ -16,7 +17,8 @@ import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-res
 
 export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
   async actualizarRestaurante(
-    actualizarRestauranteDto: ActualizarRestauranteDto
+    actualizarRestauranteDto: ActualizarRestauranteDto,
+    options?: OptionsActualizarRestaurante
   ): Promise<RestauranteDetalladoEntity> {
     const {
       id,
@@ -26,10 +28,14 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       foto_restaurante,
       horas_servicios,
       localizacion,
+      menu_id,
       nombre
     } = actualizarRestauranteDto
 
     if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id del restaurante no es valido')
+
+    let session: ClientSession | undefined
+    session = options?.session
 
     const data: UpdateQuery<RestauranteDocument> = {
       descripcion: descripcion,
@@ -37,12 +43,14 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       url_fotos_restaurantes: foto_restaurante,
       horas_servicio: horas_servicios,
       locacion: localizacion,
-      nombre: nombre
+      nombre: nombre,
+      menu_id: menu_id
     }
 
     const restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {
       new: true,
-      runValidators: true
+      runValidators: true,
+      session: session
     }).populate('usuario_id')
 
     if (!restauranteActualizado)

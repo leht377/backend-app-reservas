@@ -5,6 +5,10 @@ export interface OptionsRegistrarRestaurante {
   session?: any
 }
 
+export interface OptionsActualizarRestaurante {
+  session?: any
+}
+
 export interface RestaurantesConPaginacion {
   restaurantes: RestauranteDetalladoEntity[] | []
   paginacion: ResultadoPaginado

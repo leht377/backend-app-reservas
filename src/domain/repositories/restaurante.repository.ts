@@ -2,7 +2,11 @@ import { ActualizarRestauranteDto } from '../dtos'
 import { ObtenerRestauranteDto } from '../dtos/restaurante/obtener-restaurantes.dto'
 import { RegistrarRestauranteDto } from '../dtos/restaurante/registrar-restaurante.dto'
 import { RestauranteDetalladoEntity, RestauranteEntity } from '../entities'
-import { OptionsRegistrarRestaurante, RestaurantesConPaginacion } from '../interfaces'
+import {
+  OptionsActualizarRestaurante,
+  OptionsRegistrarRestaurante,
+  RestaurantesConPaginacion
+} from '../interfaces'
 
 export abstract class RestauranteRepository {
   abstract registrarRestaurante(
@@ -18,6 +22,7 @@ export abstract class RestauranteRepository {
   ): Promise<RestaurantesConPaginacion>
 
   abstract actualizarRestaurante(
-    actualizarRestauranteDto: ActualizarRestauranteDto
+    actualizarRestauranteDto: ActualizarRestauranteDto,
+    options?: OptionsActualizarRestaurante
   ): Promise<RestauranteDetalladoEntity>
 }

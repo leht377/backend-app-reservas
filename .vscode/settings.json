@@ -18,6 +18,7 @@
     "/src/domain/dtos/restaurante",
     "/src/domain/dtos/menu",
     "/src/infrastructure/datasources",
-    "/src/infrastructure/repositories"
+    "/src/infrastructure/repositories",
+    "/src/domain/use-case/menu"
   ]
 }

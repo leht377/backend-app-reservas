@@ -12,7 +12,8 @@ const menuSchema = new Schema<MenuDocument>({
     ref: 'Restaurante'
   },
   platos_ids: {
-    type: [{ type: Schema.ObjectId, ref: 'Plato' }]
+    type: [{ type: Schema.ObjectId, ref: 'Plato' }],
+    default: []
   }
 })
 

@@ -4,18 +4,18 @@ export class MenuEntity {
   constructor(
     private readonly id: string,
     private readonly restaurante_id: string,
-    private platos: PlatoEntity[]
+    private platos: PlatoEntity[] | []
   ) {}
 
-  get getId(): string {
+  getId(): string {
     return this.id
   }
 
-  get getRestauranteId(): string {
+  getRestauranteId(): string {
     return this.restaurante_id
   }
 
-  get getPlatos(): PlatoEntity[] {
+  getPlatos(): PlatoEntity[] {
     return this.platos
   }
 }

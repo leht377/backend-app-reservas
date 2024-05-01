@@ -1,5 +1,6 @@
 import {
   ActualizarRestauranteDto,
+  OptionsActualizarRestaurante,
   RestauranteDataSource,
   RestauranteDetalladoEntity,
   RestauranteEntity,
@@ -13,9 +14,10 @@ export class RestauranteRepositoryImpl implements RestauranteRepository {
   constructor(private readonly restauranteDataSource: RestauranteDataSource) {}
 
   actualizarRestaurante(
-    actualizarRestauranteDto: ActualizarRestauranteDto
+    actualizarRestauranteDto: ActualizarRestauranteDto,
+    options?: OptionsActualizarRestaurante | undefined
   ): Promise<RestauranteDetalladoEntity> {
-    return this.restauranteDataSource.actualizarRestaurante(actualizarRestauranteDto)
+    return this.restauranteDataSource.actualizarRestaurante(actualizarRestauranteDto, options)
   }
 
   obtenerRestaurantes(

@@ -9,7 +9,8 @@ export class ActualizarRestauranteDto {
     public readonly localizacion?: string,
     public readonly foto_restaurante?: string,
     public readonly horas_servicios?: string[],
-    public readonly dias_servicios?: string[]
+    public readonly dias_servicios?: string[],
+    public readonly menu_id?: string
   ) {}
 
   static crear(objecto: { [key: string]: any }): ActualizarRestauranteDto {
@@ -21,15 +22,19 @@ export class ActualizarRestauranteDto {
       foto_restaurante,
       horas_servicios,
       dias_servicios,
-      usuarioToken
+      usuarioToken,
+      menu_id,
+      usuario_id
     } = objecto
-
-    const usuario_id = usuarioToken?.id || usuarioToken?._id
+    // const usuario_id = usuarioToken?.id || usuarioToken?._id
     // Validar tipos de datos
+
     if (!id) throw CustomErrors.badRequest('El id del restaurante es requerido')
     if (!usuario_id) throw CustomErrors.badRequest('El id usuario es requerido')
     if (nombre && typeof nombre !== 'string')
       throw CustomErrors.badRequest('El nombre debe ser una cadena de texto')
+    if (menu_id && typeof menu_id?.toString() !== 'string')
+      throw CustomErrors.badRequest('El menu_id debe ser una cadena de texto')
     if (descripcion && typeof descripcion !== 'string')
       throw CustomErrors.badRequest('La descripción debe ser una cadena de texto')
     if (localizacion && typeof localizacion !== 'string')
@@ -49,7 +54,8 @@ export class ActualizarRestauranteDto {
       localizacion,
       foto_restaurante,
       horas_servicios,
-      dias_servicios
+      dias_servicios,
+      menu_id
     )
   }
 }
