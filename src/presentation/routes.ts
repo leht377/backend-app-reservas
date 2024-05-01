@@ -3,6 +3,7 @@ import { CustomMiddleware, ErrorHandlerMiddleware } from './middlewares'
 import { AuthRoutes } from './auth'
 import { ClienteRoutes } from './cliente/routes'
 import { RestauranteRoutes } from './restaurante/routes'
+import { MenuRoutes } from './menu/routes'
 
 export class AppRoutes {
   static get routes(): Router {
@@ -11,6 +12,7 @@ export class AppRoutes {
     routes.use('/api/auth', AuthRoutes.routes)
     routes.use('/api/clientes', ClienteRoutes.routes)
     routes.use('/api/restaurantes/', RestauranteRoutes.routes)
+    routes.use('/api/menus/', MenuRoutes.routes)
 
     routes.use(CustomMiddleware.UnknowEnpoint)
     routes.use(ErrorHandlerMiddleware.ErrorHandler)

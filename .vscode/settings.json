@@ -15,6 +15,9 @@
     "/src/domain/transations",
     "/src/domain/interfaces",
     "/src/domain/use-case/restaurante",
-    "/src/domain/dtos/restaurante"
+    "/src/domain/dtos/restaurante",
+    "/src/domain/dtos/menu",
+    "/src/infrastructure/datasources",
+    "/src/infrastructure/repositories"
   ]
 }

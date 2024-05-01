@@ -38,6 +38,7 @@ export class RestauranteController {
 
   actualizarRestaurante = async (req: Request, res: Response, next: NextFunction) => {
     const restaurante_id = req.params?.id
+    console.log(req.body)
     try {
       const actualizarRestauranteDto = ActualizarRestauranteDto.crear({
         ...req.body,
