@@ -1,6 +1,7 @@
 export * from './categoria.entity'
 export * from './cliente-detallado.entity'
 export * from './cliente.entity'
+export * from './hashtag.entity'
 export * from './menu.entity'
 export * from './plato.entity'
 export * from './restaurante-detallado.entity'

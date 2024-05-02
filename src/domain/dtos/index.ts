@@ -1,6 +1,7 @@
 export * from './auth'
 export * from './categoria'
 export * from './cliente'
+export * from './hashtag'
 export * from './menu'
 export * from './restaurante'
 export * from './usuario'

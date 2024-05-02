@@ -20,6 +20,8 @@
     "/src/infrastructure/datasources",
     "/src/infrastructure/repositories",
     "/src/domain/use-case/menu",
-    "/src/domain/dtos/categoria"
+    "/src/domain/dtos/categoria",
+    "/src/domain/dtos/hashtag",
+    "/src/domain/use-case/hashtag"
   ]
 }

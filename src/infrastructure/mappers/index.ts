@@ -1,5 +1,6 @@
 export * from './categoriaMapper'
 export * from './cliente.mapper'
+export * from './hashtagMapper'
 export * from './menu.mapper'
 export * from './restaurante.mapper'
 export * from './usuario.mapper'
