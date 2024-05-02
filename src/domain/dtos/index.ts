@@ -1,4 +1,5 @@
 export * from './auth'
+export * from './categoria'
 export * from './cliente'
 export * from './menu'
 export * from './restaurante'

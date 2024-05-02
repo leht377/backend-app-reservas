@@ -1,3 +1,4 @@
+export * from './categoriaMapper'
 export * from './cliente.mapper'
 export * from './menu.mapper'
 export * from './restaurante.mapper'
