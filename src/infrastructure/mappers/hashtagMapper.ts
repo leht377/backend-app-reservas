@@ -1,4 +1,4 @@
-import { CategoriaEntity, CustomErrors, HashtagEntity } from '../../domain'
+import { CustomErrors, HashtagEntity } from '../../domain'
 
 export class HashtagMapper {
   static HashtagEntityFromObject(object: { [key: string]: any }): HashtagEntity {
