@@ -9,6 +9,9 @@ import {
 
 export class CategoriaRepositoryImpl implements CategoriaRepository {
   constructor(private readonly categoriaRepository: CategoriaRepository) {}
+  obtener(): Promise<[] | CategoriaEntity[]> {
+    return this.categoriaRepository.obtener()
+  }
   crear(crearCategoriaDto: CrearCategoriaDto): Promise<CategoriaEntity> {
     return this.categoriaRepository.crear(crearCategoriaDto)
   }

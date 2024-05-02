@@ -11,6 +11,7 @@ export class CategoriaRoutes {
     const controller = new CategoriaController(repository)
 
     router.post('/', controller.crear)
+    router.get('/', controller.obtener)
     return router
   }
 }

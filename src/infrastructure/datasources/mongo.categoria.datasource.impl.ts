@@ -12,6 +12,11 @@ import { CategoriaModel } from '../../data'
 import { CategoriaMapper } from '../mappers'
 
 export class MongoCategoriaDatasourceImpl implements CategoriaDatasource {
+  async obtener(): Promise<[] | CategoriaEntity[]> {
+    const categorias = await CategoriaModel.find({}).lean()
+    return categorias?.map((categoria) => CategoriaMapper.CategoriaEntityFromObject(categoria))
+  }
+
   async crear(crearCategoriaDto: CrearCategoriaDto): Promise<CategoriaEntity> {
     try {
       const categoria = new CategoriaModel({ nombre: crearCategoriaDto.nombre })
