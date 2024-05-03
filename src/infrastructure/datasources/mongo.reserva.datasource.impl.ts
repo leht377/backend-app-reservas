@@ -18,7 +18,8 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         estado_reserva,
         fecha_reserva,
         hora_reserva,
-        nombre_reservante
+        nombre_reservante,
+        codigo_ingreso
       } = actualizarReservaDto
 
       if (!isValidObjectId(reserva_id))
@@ -29,7 +30,8 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         estado: estado_reserva,
         fecha_reserva: fecha_reserva,
         hora_reserva: hora_reserva,
-        nombre_reservante: nombre_reservante
+        nombre_reservante: nombre_reservante,
+        cod_ingreso: codigo_ingreso
       }
 
       const reservaActualizada = await ReservaModel.findByIdAndUpdate(reserva_id, data, {

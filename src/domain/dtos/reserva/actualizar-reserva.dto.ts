@@ -8,7 +8,8 @@ export class ActualizarReservaDto {
     public readonly cantidad_personas?: number,
     public readonly estado_reserva?: EstadoReserva,
     public readonly fecha_reserva?: Date,
-    public readonly hora_reserva?: Date
+    public readonly hora_reserva?: Date,
+    public readonly codigo_ingreso?: string
   ) {}
 
   crear(object: { [key: string]: any }): ActualizarReservaDto {
@@ -18,7 +19,8 @@ export class ActualizarReservaDto {
       cantidad_personas,
       estado_reserva,
       fecha_reserva,
-      hora_reserva
+      hora_reserva,
+      codigo_ingreso
     } = object
 
     let cantidad_personas_number
@@ -65,7 +67,8 @@ export class ActualizarReservaDto {
       cantidad_personas_number,
       estado_reserva,
       fechaReservaDate,
-      horaReservaDate
+      horaReservaDate,
+      codigo_ingreso
     )
   }
 }
