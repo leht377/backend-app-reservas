@@ -1,8 +1,20 @@
-import { MenuDatasource, MenuEntity, MenuRepository, OptiosRegistrarMenu } from '../../domain'
-import { RegistrarMenuDto } from '../../domain/dtos/menu'
+import {
+  MenuDatasource,
+  MenuEntity,
+  MenuRepository,
+  OptiosAgregarPlatoMenu,
+  OptiosRegistrarMenu
+} from '../../domain'
+import { AgregarPlatoDto, RegistrarMenuDto } from '../../domain/dtos/menu'
 
 export class MenuRepositoryImpl implements MenuRepository {
   constructor(private readonly menuDataSource: MenuDatasource) {}
+  async agregarPlatoMenu(
+    agregarPlatoDto: AgregarPlatoDto,
+    options?: OptiosAgregarPlatoMenu | undefined
+  ): Promise<void> {
+    return this.menuDataSource.agregarPlatoMenu(agregarPlatoDto, options)
+  }
   registrarMenu(
     registrarMenuDto: RegistrarMenuDto,
     options?: OptiosRegistrarMenu

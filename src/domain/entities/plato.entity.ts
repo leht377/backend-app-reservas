@@ -1,8 +1,11 @@
+import { CategoriaEntity } from './categoria.entity'
+import { HashtagEntity } from './hashtag.entity'
+
 export class PlatoEntity {
   constructor(
     private readonly id: string,
-    private categorias: string[],
-    private hastags: string[],
+    private categorias: CategoriaEntity[],
+    private hastags: HashtagEntity[],
     private nombre: string,
     private descripcion: string,
     private foto_principal: string,
@@ -13,11 +16,11 @@ export class PlatoEntity {
     return this.id
   }
 
-  get getCategorias(): string[] {
+  get getCategorias(): CategoriaEntity[] {
     return this.categorias
   }
 
-  get getHastags(): string[] {
+  get getHastags(): HashtagEntity[] {
     return this.hastags
   }
 

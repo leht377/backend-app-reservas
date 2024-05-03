@@ -19,7 +19,7 @@ const platoSchema = new Schema<PlatoDocument>({
     required: true
   },
   nombre: { type: String, required: true, minlength: 5 },
-  descripcion: { type: String, required: true, minlength: 100, maxlength: 200 },
+  descripcion: { type: String, required: true, minlength: 50, maxlength: 200 },
   url_foto_principal: { type: String, required: true },
   url_fotos_secundarias: { type: [{ type: String }] }
 })

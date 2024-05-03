@@ -22,6 +22,8 @@
     "/src/domain/use-case/menu",
     "/src/domain/dtos/categoria",
     "/src/domain/dtos/hashtag",
-    "/src/domain/use-case/hashtag"
+    "/src/domain/use-case/hashtag",
+    "/src/domain/dtos/plato",
+    "/src/domain/use-case/plato"
   ]
 }
