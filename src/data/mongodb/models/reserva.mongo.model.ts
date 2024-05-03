@@ -9,7 +9,7 @@ interface ReservaDocument extends Document {
   estado: EstadoReserva
   fecha_reserva: Date
   hora_reserva: Date
-  cod_ingreso: string
+  cod_ingreso: string | null
 }
 
 const reservaSchema = new Schema<ReservaDocument>({
@@ -48,7 +48,10 @@ const reservaSchema = new Schema<ReservaDocument>({
     type: Date,
     required: true
   },
-
+  cod_ingreso: {
+    type: String,
+    default: null
+  },
   hora_reserva: {
     type: Date,
     required: true,
@@ -61,10 +64,6 @@ const reservaSchema = new Schema<ReservaDocument>({
   }
 })
 
-const ReservaModel = mongoose.model<ReservaDocument>(
-  'Reserva',
-  reservaSchema,
-  'reservas'
-)
+const ReservaModel = mongoose.model<ReservaDocument>('Reserva', reservaSchema, 'reservas')
 
 export { ReservaDocument, ReservaModel }
