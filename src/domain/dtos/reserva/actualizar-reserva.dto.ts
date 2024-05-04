@@ -12,7 +12,7 @@ export class ActualizarReservaDto {
     public readonly codigo_ingreso?: string
   ) {}
 
-  crear(object: { [key: string]: any }): ActualizarReservaDto {
+  static crear(object: { [key: string]: any }): ActualizarReservaDto {
     const {
       reserva_id,
       nombre_reservante,

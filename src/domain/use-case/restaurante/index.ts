@@ -1,3 +1,4 @@
+export * from './aceptar-reservar.usecase'
 export * from './actualizar-restaurante.usecase'
 export * from './obtener-restaurante-por-id.usecase'
 export * from './obtener-restaurantes.usecase'

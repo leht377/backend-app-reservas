@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { UsuarioModel } from '../../data/mongodb'
+import { ClienteModel, RestuaranteModelo, UsuarioModel } from '../../data/mongodb'
 import { JwtAdapter } from '../../common/utils/jwt'
 import { TokenPayload } from '../../domain'
+import { UsuarioRol } from '../../common/utils'
 
 export class AuthMiddleware {
   static async ValidateJWT(req: Request, res: Response, next: NextFunction) {
@@ -20,7 +21,17 @@ export class AuthMiddleware {
       const user = await UsuarioModel.findById(payload.usuario_id)
       if (!user) return res.status(401).json({ error: 'Invalid token - user not found' })
 
-      req.body.usuarioToken = user
+      if (user?.rol === UsuarioRol.CLIENTE) {
+        const cliente = await ClienteModel.findOne({ usuario_id: user._id })
+        if (!cliente)
+          res.status(500).json({ error: 'No se encontro ningun cliente asociado a la cuenta' })
+        req.body.usuarioToken = { ...user?.toObject(), usuario_rol_id: cliente?._id }
+      } else if (user?.rol === UsuarioRol.RESTAURANTE) {
+        const restaurante = await RestuaranteModelo.findOne({ usuario_id: user._id })
+        if (!restaurante)
+          res.status(500).json({ error: 'No se encontro ningun restaurante asociado a la cuenta' })
+        req.body.usuarioToken = { ...user?.toObject(), usuario_rol_id: restaurante?._id }
+      }
 
       next()
     } catch (error) {

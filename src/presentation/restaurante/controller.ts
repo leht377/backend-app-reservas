@@ -1,14 +1,24 @@
 import { NextFunction, Request, Response } from 'express'
-import { ActualizarRestauranteDto, CustomErrors, RestauranteRepository } from '../../domain'
 import {
+  AceptarReservaDto,
+  ActualizarRestauranteDto,
+  CustomErrors,
+  ObtenerRestauranteDto,
+  ReservaRepository,
+  RestauranteRepository
+} from '../../domain'
+import {
+  AceptarReserva,
   ActualizarRestaurante,
   ObtenerRestaurantePorId,
   ObtenerRestaurantes
 } from '../../domain/use-case/restaurante'
-import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-restaurantes.dto'
 
 export class RestauranteController {
-  constructor(private readonly restauranteRepository: RestauranteRepository) {}
+  constructor(
+    private readonly restauranteRepository: RestauranteRepository,
+    private readonly reservaRepository: ReservaRepository
+  ) {}
 
   obtenerRestaurantePorId = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -54,4 +64,32 @@ export class RestauranteController {
       next(error)
     }
   }
+
+  aceptarReserva = async (req: Request, res: Response, next: NextFunction) => {
+    const usuario = req.body.usuarioToken
+    const usuario_token_id = usuario?._id || usuario?.id
+    const restaurante_id = req.params?.id_restaurante
+    const reserva_id = req.params?.id_reserva
+    const rol_usuario = usuario?.rol
+    const usuario_rol_id = usuario?.usuario_rol_id
+    try {
+      const aceptarReservaDto = AceptarReservaDto.crear({
+        usuario_token_id,
+        restaurante_id,
+        reserva_id,
+        rol_usuario,
+        usuario_rol_id
+      })
+
+      const reserva = await new AceptarReserva(
+        this.restauranteRepository,
+        this.reservaRepository
+      ).execute(aceptarReservaDto)
+
+      res.json(reserva)
+    } catch (error) {
+      next(error)
+    }
+  }
+  rechazarReserva = async (req: Request, res: Response, next: NextFunction) => {}
 }
