@@ -19,12 +19,12 @@ export class ObtenerReservaPorId {
         reserva.getRestauranteId().toString() != obtenerReservaPorIdDto.usuario_rol_id?.toString()
       )
         throw CustomErrors.badRequest(
-          'El usuario no se encuentra autorizado para consultar esta reserva'
+          'El usuario con rol restuarante no se encuentra autorizado para consultar esta reserva'
         )
     } else if (obtenerReservaPorIdDto.rol_usuario === UsuarioRol.CLIENTE) {
       if (reserva.getClienteId().toString() != obtenerReservaPorIdDto.usuario_rol_id?.toString())
         throw CustomErrors.badRequest(
-          'El usuario no se encuentra autorizado para consultar esta reserva'
+          'El usuario con rol cliente no se encuentra autorizado para consultar esta reserva'
         )
     }
 
