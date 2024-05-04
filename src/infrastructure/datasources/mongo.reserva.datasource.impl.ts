@@ -2,6 +2,7 @@ import mongoose, { UpdateQuery, isValidObjectId } from 'mongoose'
 import {
   ActualizarReservaDto,
   CustomErrors,
+  ObtenerReservaPorIdDto,
   ReservaDatasource,
   ReservaEntity,
   SolicitarReservaDto
@@ -10,6 +11,20 @@ import { ReservaDocument, ReservaModel } from '../../data'
 import { ReservaMapper } from '../mappers'
 
 export class MongoReservaDatasourceImpl implements ReservaDatasource {
+  async obtenerReservaPorId(
+    obtenerReservaPorIdDto: ObtenerReservaPorIdDto
+  ): Promise<ReservaEntity | null> {
+    try {
+      const { reserva_id } = obtenerReservaPorIdDto
+      if (!isValidObjectId(reserva_id))
+        throw CustomErrors.badRequest('El reserva_id no es un id valido')
+      const reserva = await ReservaModel.findById(reserva_id)
+      if (!reserva) return null
+      return ReservaMapper.ReservaEntityFromObject(reserva?.toObject())
+    } catch (error) {
+      throw error
+    }
+  }
   async actualizarReserva(actualizarReservaDto: ActualizarReservaDto): Promise<ReservaEntity> {
     try {
       const {

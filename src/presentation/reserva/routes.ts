@@ -28,6 +28,7 @@ export class ReservaRoutes {
     const controller = new ReservaController(repository, restauranteRepository, clienteRepository)
 
     router.post('/', AuthMiddleware.ValidateJWT, controller.registrarReserva)
+    router.get('/:id', AuthMiddleware.ValidateJWT, controller.obtenerReservaPorId)
 
     return router
   }
