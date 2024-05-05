@@ -25,6 +25,8 @@
     "/src/domain/use-case/hashtag",
     "/src/domain/dtos/plato",
     "/src/domain/use-case/plato",
-    "/src/domain/dtos/reserva"
+    "/src/domain/dtos/reserva",
+    "/src/domain/dtos/image",
+    "/src/domain/use-case/image"
   ]
 }

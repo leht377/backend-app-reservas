@@ -1,6 +1,7 @@
 export * from './categoria.repository.impl'
 export * from './cliente.repository.impl'
 export * from './hashtag.repository.impl'
+export * from './image.repository.impl'
 export * from './menu.repository.impl'
 export * from './plato.repository.impl'
 export * from './reserva.repository.impl'

@@ -10,7 +10,8 @@ export class ActualizarRestauranteDto {
     public readonly foto_restaurante?: string,
     public readonly horas_servicios?: string[],
     public readonly dias_servicios?: string[],
-    public readonly menu_id?: string
+    public readonly menu_id?: string,
+    public readonly filesToUpload?: any
   ) {}
 
   static crear(objecto: { [key: string]: any }): ActualizarRestauranteDto {
@@ -18,6 +19,7 @@ export class ActualizarRestauranteDto {
       id,
       nombre,
       descripcion,
+      files,
       localizacion,
       foto_restaurante,
       horas_servicios,
@@ -55,7 +57,8 @@ export class ActualizarRestauranteDto {
       foto_restaurante,
       horas_servicios,
       dias_servicios,
-      menu_id
+      menu_id,
+      files
     )
   }
 }

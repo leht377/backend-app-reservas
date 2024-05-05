@@ -3,10 +3,13 @@ import {
   AceptarReservaDto,
   ActualizarRestauranteDto,
   CustomErrors,
+  ImageRepository,
   ObtenerRestauranteDto,
   RechazarReservaDto,
   ReservaRepository,
-  RestauranteRepository
+  RestauranteRepository,
+  UploadImageDto,
+  filesObject
 } from '../../domain'
 import {
   AceptarReserva,
@@ -15,11 +18,16 @@ import {
   ObtenerRestaurantes,
   RechazarReserva
 } from '../../domain/use-case/restaurante'
+import { limpiarFiles } from '../../common/utils/cleanTempFiles'
+import { FileArray } from 'express-fileupload'
+import { fileObjectGenerator } from '../../common/helpers/fileObjectGenerator'
+import { UploadImage } from '../../domain/use-case/image'
 
 export class RestauranteController {
   constructor(
     private readonly restauranteRepository: RestauranteRepository,
-    private readonly reservaRepository: ReservaRepository
+    private readonly reservaRepository: ReservaRepository,
+    private readonly imageRepository: ImageRepository
   ) {}
 
   obtenerRestaurantePorId = async (req: Request, res: Response, next: NextFunction) => {
@@ -51,19 +59,33 @@ export class RestauranteController {
   actualizarRestaurante = async (req: Request, res: Response, next: NextFunction) => {
     const restaurante_id = req.params?.id
     const usuario_id = req?.body.usuarioToken?.id || req?.body.usuarioToken?._id
+    let foto_restaurante
+
     try {
+      if (req.files) {
+        const files = fileObjectGenerator(req.files!)
+        if (files.length > 1) throw CustomErrors.badRequest('Unicamente se puede subir una foto ')
+        const uploadImageDto = UploadImageDto.crear(files)
+        const urlImagenes = await new UploadImage(this.imageRepository).execute(uploadImageDto)
+        foto_restaurante = urlImagenes[0]
+      }
+
       const actualizarRestauranteDto = ActualizarRestauranteDto.crear({
         ...req.body,
         id: restaurante_id,
-        usuario_id
+        usuario_id,
+        foto_restaurante
       })
 
       const restaurante = await new ActualizarRestaurante(this.restauranteRepository).execute(
         actualizarRestauranteDto
       )
+
       res.json(restaurante)
     } catch (error) {
       next(error)
+    } finally {
+      if (req.files) limpiarFiles(req?.files)
     }
   }
 

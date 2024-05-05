@@ -1,7 +1,8 @@
-import { ActualizarRestauranteDto } from '../../dtos'
+import { fileObjectGenerator } from '../../../common/helpers/fileObjectGenerator'
+import { ActualizarRestauranteDto, UploadImageDto } from '../../dtos'
 import { RestauranteDetalladoEntity } from '../../entities'
 import { CustomErrors } from '../../errors'
-import { RestauranteRepository } from '../../repositories'
+import { ImageRepository, RestauranteRepository } from '../../repositories'
 
 export class ActualizarRestaurante {
   constructor(private readonly restauranteRepository: RestauranteRepository) {}
