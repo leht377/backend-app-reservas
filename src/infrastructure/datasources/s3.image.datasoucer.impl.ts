@@ -24,9 +24,8 @@ export class S3ImageDatasourceImpl implements ImageDatasouce {
       const uploadPromises = files.map(({ nombre, tempFilePath }) => {
         const stream = fs.createReadStream(tempFilePath)
         let fileName
-        fileName = nombre
-        filesNames.push(fileName)
-
+        fileName = nombre.replace(/\s+/g, '')
+        filesNames.push(`${envs.AWS_URI_OBJECT}/${fileName}`)
         const uploadParams = {
           Bucket: envs.AWS_BUCKET_NAME,
           Key: fileName,
@@ -35,8 +34,8 @@ export class S3ImageDatasourceImpl implements ImageDatasouce {
         const command = new PutObjectCommand(uploadParams)
         return this.client.send(command)
       })
+      await Promise.all(uploadPromises)
 
-      const uploadImages = await Promise.all(uploadPromises)
       return filesNames
     } catch (error) {
       throw error
