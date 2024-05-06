@@ -2,24 +2,28 @@ import { NextFunction, Request, Response } from 'express'
 import {
   AceptarReservaDto,
   ActualizarRestauranteDto,
+  CalificacionRepository,
+  CalificarRestuaranteDto,
   CustomErrors,
   ImageRepository,
   ObtenerRestauranteDto,
   RechazarReservaDto,
   ReservaRepository,
   RestauranteRepository,
+  TransationManager,
   UploadImageDto,
   filesObject
 } from '../../domain'
 import {
   AceptarReserva,
   ActualizarRestaurante,
+  CalificarRestuarante,
   ObtenerRestaurantePorId,
   ObtenerRestaurantes,
   RechazarReserva
 } from '../../domain/use-case/restaurante'
 import { limpiarFiles } from '../../common/utils/cleanTempFiles'
-import { FileArray } from 'express-fileupload'
+
 import { fileObjectGenerator } from '../../common/helpers/fileObjectGenerator'
 import { UploadImage } from '../../domain/use-case/image'
 
@@ -27,7 +31,9 @@ export class RestauranteController {
   constructor(
     private readonly restauranteRepository: RestauranteRepository,
     private readonly reservaRepository: ReservaRepository,
-    private readonly imageRepository: ImageRepository
+    private readonly imageRepository: ImageRepository,
+    private readonly calificacionRepository: CalificacionRepository,
+    private readonly transationManager: TransationManager
   ) {}
 
   obtenerRestaurantePorId = async (req: Request, res: Response, next: NextFunction) => {
@@ -115,6 +121,7 @@ export class RestauranteController {
       next(error)
     }
   }
+
   rechazarReserva = async (req: Request, res: Response, next: NextFunction) => {
     const usuario = req.body.usuarioToken
     const usuario_token_id = usuario?._id || usuario?.id
@@ -138,6 +145,30 @@ export class RestauranteController {
 
       res.json(reserva)
     } catch (error) {
+      next(error)
+    }
+  }
+
+  calificarRestaurante = async (req: Request, res: Response, next: NextFunction) => {
+    const session = await this.transationManager.startSession()
+    try {
+      const data = {
+        ...req.body,
+        restaurante_id: req.params?.id,
+        cliente_id: req.body?.usuarioToken?.usuario_rol_id,
+        usuario_id: req.body?.usuarioToken?._id || req.body?.usuarioToken?.id
+      }
+      const calificarRestuaranteDto = CalificarRestuaranteDto.crear(data)
+
+      const restaurante = await new CalificarRestuarante(
+        this.restauranteRepository,
+        this.calificacionRepository
+      ).execute(calificarRestuaranteDto, session)
+
+      await this.transationManager.commit(session)
+      res.json(restaurante)
+    } catch (error) {
+      await this.transationManager.abort(session)
       next(error)
     }
   }

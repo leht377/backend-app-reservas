@@ -1,3 +1,4 @@
+export * from './calificacionMapper'
 export * from './categoriaMapper'
 export * from './cliente.mapper'
 export * from './hashtagMapper'

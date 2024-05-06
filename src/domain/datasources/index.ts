@@ -1,3 +1,4 @@
+export * from './calificacion.datasource'
 export * from './categoria.datasource'
 export * from './cliente.datasource'
 export * from './hashtag.datasource'

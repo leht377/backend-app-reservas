@@ -29,7 +29,9 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       horas_servicios,
       localizacion,
       menu_id,
-      nombre
+      nombre,
+      calificacion,
+      cantidad_resenas
     } = actualizarRestauranteDto
 
     if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id del restaurante no es valido')
@@ -44,7 +46,9 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       horas_servicio: horas_servicios,
       locacion: localizacion,
       nombre: nombre,
-      menu_id: menu_id
+      menu_id: menu_id,
+      calificacion: calificacion,
+      cantidad_resenas: cantidad_resenas
     }
 
     const restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {

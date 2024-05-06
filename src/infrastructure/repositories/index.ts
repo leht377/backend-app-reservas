@@ -1,3 +1,4 @@
+export * from './calificacion.repository.impl'
 export * from './categoria.repository.impl'
 export * from './cliente.repository.impl'
 export * from './hashtag.repository.impl'

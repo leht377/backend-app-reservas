@@ -1,3 +1,4 @@
+export * from './calificacion.interface'
 export * from './files.interface'
 export * from './menu.interface'
 export * from './plato.interface'

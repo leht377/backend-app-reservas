@@ -1,3 +1,4 @@
+export * from './calificacion.entity'
 export * from './categoria.entity'
 export * from './cliente-detallado.entity'
 export * from './cliente.entity'

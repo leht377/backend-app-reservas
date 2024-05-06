@@ -6,7 +6,7 @@ import {
 import { CalificacionEntity } from '../entities'
 import { OptiosActualizarCalificacion, OptiosRegistrarCalificacion } from '../interfaces'
 
-export abstract class CalificacionDatasource {
+export abstract class CalificacionRepository {
   abstract obtenerCalificacionPorFiltro(
     obtenerCalificaionPorFiltroDto: ObtenerCalificaionPorFiltroDto
   ): Promise<CalificacionEntity | null>

@@ -1,3 +1,4 @@
+export * from './mongo.calificacion.datasource.impl'
 export * from './mongo.categoria.datasource.impl'
 export * from './mongo.cliente.datasource.impl'
 export * from './mongo.hashtag.datasource.impl'

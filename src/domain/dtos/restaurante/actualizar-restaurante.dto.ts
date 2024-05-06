@@ -11,7 +11,9 @@ export class ActualizarRestauranteDto {
     public readonly horas_servicios?: string[],
     public readonly dias_servicios?: string[],
     public readonly menu_id?: string,
-    public readonly filesToUpload?: any
+    public readonly filesToUpload?: any,
+    public readonly calificacion?: number,
+    public readonly cantidad_resenas?: number
   ) {}
 
   static crear(objecto: { [key: string]: any }): ActualizarRestauranteDto {
@@ -26,6 +28,8 @@ export class ActualizarRestauranteDto {
       dias_servicios,
       usuarioToken,
       menu_id,
+      calificacion,
+      cantidad_resenas,
       usuario_id
     } = objecto
     // const usuario_id = usuarioToken?.id || usuarioToken?._id
@@ -47,6 +51,10 @@ export class ActualizarRestauranteDto {
       throw CustomErrors.badRequest('Las horas de servicio deben ser un array de cadenas de texto')
     if (dias_servicios && !Array.isArray(dias_servicios))
       throw CustomErrors.badRequest('Los días de servicio deben ser un array de cadenas de texto')
+    if (cantidad_resenas && typeof cantidad_resenas !== 'number')
+      throw CustomErrors.badRequest('La cantidad de reseñas debe ser un numero')
+    if (calificacion && typeof calificacion !== 'number')
+      throw CustomErrors.badRequest('La calificacion debe ser un numero')
 
     return new ActualizarRestauranteDto(
       id,
@@ -58,7 +66,9 @@ export class ActualizarRestauranteDto {
       horas_servicios,
       dias_servicios,
       menu_id,
-      files
+      files,
+      calificacion,
+      cantidad_resenas
     )
   }
 }

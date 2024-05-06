@@ -39,28 +39,26 @@ export class AuthMiddleware {
     }
   }
 
-  // static validateUserRole(roles: string[]) {
-  //   return async (req: Request, res: Response, next: NextFunction) => {
-  //     const userFromToken = req.body.user
-  //     if (!userFromToken) return res.status(401).json({ error: 'Missing user' })
+  static validateUserRole(roles: string[]) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      const userFromToken = req.body.usuarioToken
+      if (!userFromToken) return res.status(401).json({ error: 'Missing user' })
 
-  //     try {
-  //       const user = await UserModel.findById(userFromToken?.id)
-  //       if (!user) return res.status(401).json({ error: 'User not found' })
+      try {
+        const user = await UsuarioModel.findById(userFromToken?.id || userFromToken?._id)
+        if (!user) return res.status(401).json({ error: 'User not found' })
 
-  //       const userRoles = user.roles || []
+        const userRoles = user.rol || []
 
-  //       // Check if any of the user's roles match the required roles
-  //       const hasAuthorization = roles.some((role) => userRoles.includes(role))
-  //       if (!hasAuthorization)
-  //         return res
-  //           .status(403)
-  //           .json({ error: 'User does not have authorization' })
+        // Check if any of the user's roles match the required roles
+        const hasAuthorization = roles.some((role) => userRoles.includes(role))
+        if (!hasAuthorization)
+          return res.status(403).json({ error: 'User does not have authorization' })
 
-  //       next()
-  //     } catch (error) {
-  //       return res.status(500).json({ error: 'Internal Server Error' })
-  //     }
-  //   }
-  // }
+        next()
+      } catch (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      }
+    }
+  }
 }

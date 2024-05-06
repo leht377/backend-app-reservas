@@ -1,5 +1,6 @@
 export * from './aceptar-reservar.usecase'
 export * from './actualizar-restaurante.usecase'
+export * from './calificar-restaurante.usecase'
 export * from './obtener-restaurante-por-id.usecase'
 export * from './obtener-restaurantes.usecase'
 export * from './rechazar-reserva.usecase'
