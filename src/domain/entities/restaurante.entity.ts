@@ -13,6 +13,7 @@ export class RestauranteEntity {
     private url_foto_restaurante: string,
     private url_fotos_instalaciones: string[],
     private fechas_bloqueadas_reservas: Date[],
+    private readonly calificacion_promedio: number,
     private readonly menu_id?: string
   ) {}
 
@@ -20,6 +21,9 @@ export class RestauranteEntity {
     return this.id
   }
 
+  getCalificacionPromedio(): number {
+    return this.calificacion_promedio
+  }
   getVisible(): boolean {
     return this.visible
   }

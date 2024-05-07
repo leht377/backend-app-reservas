@@ -13,7 +13,8 @@ export class ActualizarRestauranteDto {
     public readonly menu_id?: string,
     public readonly filesToUpload?: any,
     public readonly calificacion?: number,
-    public readonly cantidad_resenas?: number
+    public readonly cantidad_resenas?: number,
+    public readonly calificacion_promedio?: number
   ) {}
 
   static crear(objecto: { [key: string]: any }): ActualizarRestauranteDto {
@@ -30,7 +31,8 @@ export class ActualizarRestauranteDto {
       menu_id,
       calificacion,
       cantidad_resenas,
-      usuario_id
+      usuario_id,
+      calificacion_promedio
     } = objecto
     // const usuario_id = usuarioToken?.id || usuarioToken?._id
     // Validar tipos de datos
@@ -55,6 +57,8 @@ export class ActualizarRestauranteDto {
       throw CustomErrors.badRequest('La cantidad de reseñas debe ser un numero')
     if (calificacion && typeof calificacion !== 'number')
       throw CustomErrors.badRequest('La calificacion debe ser un numero')
+    if (calificacion_promedio && typeof calificacion_promedio !== 'number')
+      throw CustomErrors.badRequest('La calificacion_promedio debe ser un numero')
 
     return new ActualizarRestauranteDto(
       id,
@@ -68,7 +72,8 @@ export class ActualizarRestauranteDto {
       menu_id,
       files,
       calificacion,
-      cantidad_resenas
+      cantidad_resenas,
+      calificacion_promedio
     )
   }
 }

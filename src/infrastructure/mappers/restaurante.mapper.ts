@@ -17,7 +17,8 @@ export class RestauranteMapper {
       dias_servicio,
       url_fotos_restaurantes,
       url_fotos_instalacciones,
-      fechas_bloqueadas_reservas
+      fechas_bloqueadas_reservas,
+      calificacion_promedio
     } = object
     const restaurante_id = _id || id
 
@@ -56,6 +57,7 @@ export class RestauranteMapper {
       url_fotos_restaurantes,
       url_fotos_instalacciones,
       fechas_bloqueadas_reservas,
+      calificacion_promedio,
       menu_id
     )
   }
@@ -87,6 +89,7 @@ export class RestauranteMapper {
       restaurante.getFechasBloqueadasReservas(),
       rol,
       correo,
+      restaurante.getCalificacionPromedio(),
       restaurante.getMenuId()
     )
   }

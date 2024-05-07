@@ -9,6 +9,7 @@ interface RestauranteDocument extends Document {
   descripcion?: string
   calificacion?: number
   cantidad_resenas?: number
+  calificacion_promedio?: number
   locacion: string
   visible: boolean
   horas_servicio?: HorasServicioRestaurante[]
@@ -27,6 +28,7 @@ const restauranteSchema = new Schema<RestauranteDocument>({
   descripcion: { type: String, default: '' },
   calificacion: { type: Number, default: 0 },
   cantidad_resenas: { type: Number, default: 0 },
+  calificacion_promedio: { type: Number, default: 0 },
   url_fotos_instalacciones: { type: [{ type: String }] },
   url_fotos_restaurantes: { type: [{ type: String }] },
   horas_servicio: {

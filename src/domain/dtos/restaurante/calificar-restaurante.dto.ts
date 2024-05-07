@@ -12,6 +12,8 @@ export class CalificarRestuaranteDto {
     const { calificacion, cliente_id, restaurante_id, usuario_id } = objecto
     if (!calificacion || typeof calificacion != 'number')
       throw CustomErrors.badRequest('El campo calificacion es requerido y debe ser un entero')
+    if (calificacion < 0 || calificacion > 5)
+      throw CustomErrors.badRequest('La califcacion debe no debe de ser menor que 0 ni mayor que 5')
     if (!cliente_id)
       throw CustomErrors.badRequest('El campo cliente_id es requerido y debe ser un texto')
     if (!restaurante_id)

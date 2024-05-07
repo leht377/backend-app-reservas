@@ -8,7 +8,7 @@ import {
 import { RestauranteDetalladoEntity, RestauranteEntity } from '../../entities'
 import { CustomErrors } from '../../errors'
 import { CalificacionRepository, RestauranteRepository } from '../../repositories'
-import { ActualizarRestaurante } from './actualizar-restaurante.usecase'
+
 import { ObtenerRestaurantePorId } from './obtener-restaurante-por-id.usecase'
 
 interface crearNuevaCalificacion {
@@ -65,7 +65,6 @@ export class CalificarRestuarante {
         session
       })
       return r!
-      throw CustomErrors.badRequest('')
     } else {
       const restauranteActualizado = await this.crearNuevaCalificacion({
         calificacionActual,
@@ -97,6 +96,7 @@ export class CalificarRestuarante {
     })
     const dataActualizar = {
       calificacion: calificacionActualRecalculada,
+      calificacion_promedio: calificacionActualRecalculada / params.cantidadResenasActual,
       id: params.restaurante_id,
       usuario_id: params.calificarRestuaranteDto.usuario_id
     }
@@ -115,9 +115,15 @@ export class CalificarRestuarante {
     await this.calificacionRepository.crear(crearCalificacionDto, {
       session: params.session
     })
+
+    const calificacionNueva =
+      params.calificacionActual + params.calificarRestuaranteDto.calificacion
+    const cantidad_resenasNueva = params.cantidadResenasActual + 1
+
     const dataActualizar = {
-      calificacion: params.calificacionActual + params.calificarRestuaranteDto.calificacion,
-      cantidad_resenas: params.cantidadResenasActual + 1,
+      calificacion: calificacionNueva,
+      calificacion_promedio: calificacionNueva / cantidad_resenasNueva,
+      cantidad_resenas: cantidad_resenasNueva,
       id: params.restaurante_id,
       usuario_id: params.calificarRestuaranteDto.usuario_id
     }

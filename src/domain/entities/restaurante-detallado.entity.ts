@@ -20,6 +20,7 @@ export class RestauranteDetalladoEntity extends RestauranteEntity {
     fechas_bloqueadas_reservas: Date[],
     rol: string,
     correo: string,
+    calificacion_promedio: number,
     menu_id?: string
   ) {
     super(
@@ -36,6 +37,7 @@ export class RestauranteDetalladoEntity extends RestauranteEntity {
       url_foto_restaurante,
       url_fotos_instalaciones,
       fechas_bloqueadas_reservas,
+      calificacion_promedio,
       menu_id
     )
     this.rol = rol
