@@ -5,6 +5,7 @@ import { MongoClienteDatasourceImpl } from '../../infrastructure/datasources/mon
 import { MongoReservaDatasourceImpl } from '../../infrastructure/datasources'
 import { ReservaRepositoryImpl } from '../../infrastructure/repositories'
 import { AuthMiddleware } from '../middlewares/auth.middleware'
+import { UsuarioRol } from '../../common/utils'
 
 export class ClienteRoutes {
   static get routes(): Router {
@@ -18,6 +19,11 @@ export class ClienteRoutes {
     const controller = new ClienteController(repository, reservaRepository)
 
     router.get('/:id', controller.obtenerClientePorId)
+    router.put(
+      '/:id_cliente/restaurantes/:id_restaurante/addfavorito',
+      [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],
+      controller.agregarRestauranteFavorito
+    )
     router.put(
       '/:id_cliente/reservas/:id_reserva/cancelar',
       AuthMiddleware.ValidateJWT,

@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import {
+  AgregarFavorito,
+  AgregarFavoritoDto,
   CancelarReserva,
   CancelarReservaDto,
   ClienteRepository,
@@ -47,6 +49,24 @@ export class ClienteController {
       ).execute(cancelarReservaDto)
 
       res.json(reserva)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  agregarRestauranteFavorito = async (req: Request, res: Response, next: NextFunction) => {
+    const cliente_id = req.params?.id_cliente
+    const restaurante_id = req.params?.id_restaurante
+
+    const cliente_id_token = req.body?.usuarioToken?.usuario_rol_id
+
+    try {
+      if (cliente_id?.toString() != cliente_id_token?.toString()) {
+        throw CustomErrors.badRequest('No cuentas con permiso para agregar favorito a este cliente')
+      }
+      const agregarFavoritoDto = AgregarFavoritoDto.crear({ cliente_id, restaurante_id })
+      const cliente = await new AgregarFavorito(this.clienteRepository).execute(agregarFavoritoDto)
+      res.json(cliente)
     } catch (error) {
       next(error)
     }

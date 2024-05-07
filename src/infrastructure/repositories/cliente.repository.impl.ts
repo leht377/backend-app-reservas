@@ -1,4 +1,5 @@
 import {
+  AgregarFavoritoDto,
   ClienteDataSource,
   ClienteDetalladoEntity,
   ClienteEntity,
@@ -9,6 +10,11 @@ import {
 
 export class ClienteRepositoryImpl implements ClienteRepository {
   constructor(private readonly clienteDatasource: ClienteDataSource) {}
+  agregarRestauranteFavorito(
+    agregarFavoritoDto: AgregarFavoritoDto
+  ): Promise<ClienteDetalladoEntity> {
+    return this.clienteDatasource.agregarRestauranteFavorito(agregarFavoritoDto)
+  }
   obtenerClientePorUsuarioId(id: string): Promise<ClienteDetalladoEntity | null> {
     return this.clienteDatasource.obtenerClientePorUsuarioId(id)
   }
