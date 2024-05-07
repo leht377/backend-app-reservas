@@ -25,6 +25,11 @@ export class ClienteRoutes {
       controller.agregarRestauranteFavorito
     )
     router.put(
+      '/:id_cliente/restaurantes/:id_restaurante/deletefavorito',
+      [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],
+      controller.eliminarRestauranteFavorito
+    )
+    router.put(
       '/:id_cliente/reservas/:id_reserva/cancelar',
       AuthMiddleware.ValidateJWT,
       controller.cancelarReserva

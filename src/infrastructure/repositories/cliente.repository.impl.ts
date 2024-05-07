@@ -4,12 +4,18 @@ import {
   ClienteDetalladoEntity,
   ClienteEntity,
   ClienteRepository,
+  EliminarFavoritoDto,
   OptionsRegistrarCliente,
   RegistrarClienteDto
 } from '../../domain'
 
 export class ClienteRepositoryImpl implements ClienteRepository {
   constructor(private readonly clienteDatasource: ClienteDataSource) {}
+  eliminarRestauranteFavorito(
+    eliminarFavoritoDto: EliminarFavoritoDto
+  ): Promise<ClienteDetalladoEntity> {
+    return this.clienteDatasource.eliminarRestauranteFavorito(eliminarFavoritoDto)
+  }
   agregarRestauranteFavorito(
     agregarFavoritoDto: AgregarFavoritoDto
   ): Promise<ClienteDetalladoEntity> {
