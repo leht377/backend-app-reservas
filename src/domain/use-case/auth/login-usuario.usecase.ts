@@ -11,7 +11,8 @@ export class LoginUsuario {
     private readonly usuarioRepository: UsuarioRepository,
     private readonly restauranteRepository: RestauranteRepository,
     private readonly clienteRepository: ClienteRepository,
-    private readonly signToken: SignToken = JwtAdapter.generateToken
+    private readonly signToken: SignToken = JwtAdapter.generateToken,
+    private readonly singRefreshToken: SignToken = JwtAdapter.generateRefreshToken
   ) {}
   async execute(loginUsuarioDto: LoginUsuarioDto): Promise<UserToken> {
     const usuario = await this.usuarioRepository.obtenerUsuarioPorCorreo(loginUsuarioDto.correo)
@@ -54,10 +55,14 @@ export class LoginUsuario {
     }
 
     const token = await this.signToken(tokenPayload)
+    const refreshToken = await this.singRefreshToken(tokenPayload, '1d')
 
     if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
+    if (!refreshToken) throw CustomErrors.internalServer('refreshToken no pudo ser firmado')
+
     return {
       token: token,
+      refreshToken: refreshToken,
       usuario: {
         id: usuario.getId(),
         correo: usuario.getCorreo(),

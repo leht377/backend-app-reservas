@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import {
   LoginUsuarioDto,
+  RefreshTokenDto,
   RegistrarClienteUsuarioDto,
   RegistrarRestauranteUsuarioDto
 } from '../../domain/dtos'
@@ -12,6 +13,7 @@ import {
 } from '../../domain/repositories'
 import {
   LoginUsuario,
+  RefreshToken,
   RegistrarClienteUsuario,
   RegistrarRestauranteUsuario
 } from '../../domain/use-case/auth'
@@ -29,13 +31,20 @@ export class AuthController {
     const session = await this.transationManager.startSession()
     try {
       const registrarClienteDto = RegistrarClienteUsuarioDto.crear(req.body)
-      const token = await new RegistrarClienteUsuario(
+      const userToken = await new RegistrarClienteUsuario(
         this.usuarioRepository,
         this.clienteRepository
       ).execute(registrarClienteDto, session)
 
       await this.transationManager.commit(session)
-      res.json(token)
+      const { refreshToken, token, usuario } = userToken
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
+      })
+      res.json({ token, usuario })
     } catch (error) {
       await this.transationManager.abort(session)
       next(error)
@@ -45,12 +54,19 @@ export class AuthController {
     const session = await this.transationManager.startSession()
     try {
       const registrarRestauranteUsuarioDto = RegistrarRestauranteUsuarioDto.crear(req.body)
-      const token = await new RegistrarRestauranteUsuario(
+      const userToken = await new RegistrarRestauranteUsuario(
         this.usuarioRepository,
         this.restauranteRepository
       ).execute(registrarRestauranteUsuarioDto, session)
       await this.transationManager.commit(session)
-      res.json(token)
+      const { refreshToken, token, usuario } = userToken
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
+      })
+      res.json({ token, usuario })
     } catch (error) {
       await this.transationManager.abort(session)
       next(error)
@@ -59,12 +75,39 @@ export class AuthController {
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const loginUsuarioDto = LoginUsuarioDto.crear(req.body)
-      const token = await new LoginUsuario(
+      const userToken = await new LoginUsuario(
         this.usuarioRepository,
         this.restauranteRepository,
         this.clienteRepository
       ).execute(loginUsuarioDto)
-      res.json(token)
+
+      const { refreshToken, token, usuario } = userToken
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
+      })
+      res.json({ token, usuario })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const refreshTokenReq = req.cookies?.jwt
+
+      const refreshTokenDto = RefreshTokenDto.crear({ refresh_token: refreshTokenReq })
+      const userToken = await new RefreshToken().execute(refreshTokenDto)
+      const { refreshToken, token, usuario } = userToken
+      res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000
+      })
+      res.json({ token, usuario })
     } catch (error) {
       next(error)
     }

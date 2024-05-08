@@ -1,5 +1,6 @@
 export interface UserToken {
   token: string
+  refreshToken: string
   usuario: {
     id: string
     correo: string

@@ -30,6 +30,7 @@ export class AuthRoutes {
     )
 
     router.post('/login', controller.login)
+    router.post('/refresh', controller.refreshToken)
     router.post('/registrar/clientes', controller.registrarCliente)
     router.post('/registrar/restaurantes', controller.registrarRestaurante)
 

@@ -13,7 +13,8 @@ export class RegistrarRestauranteUsuario {
   constructor(
     private readonly usuarioRepository: UsuarioRepository,
     private readonly restauranteRepository: RestauranteRepository,
-    private readonly signToken: SignToken = JwtAdapter.generateToken
+    private readonly signToken: SignToken = JwtAdapter.generateToken,
+    private readonly singRefreshToken: SignToken = JwtAdapter.generateRefreshToken
   ) {}
   async execute(
     resgistrarRestauranteUsuarioDto: RegistrarRestauranteUsuarioDto,
@@ -47,9 +48,13 @@ export class RegistrarRestauranteUsuario {
     }
 
     const token = await this.signToken(tokenPayload)
+    const refreshToken = await this.singRefreshToken(tokenPayload, '1d')
+
     if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
+    if (!refreshToken) throw CustomErrors.internalServer('refreshToken no pudo ser firmado')
     return {
       token: token,
+      refreshToken: refreshToken,
       usuario: {
         id: usuario.getId(),
         correo: usuario.getCorreo(),

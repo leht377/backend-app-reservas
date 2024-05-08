@@ -2,6 +2,7 @@ import express, { Router } from 'express'
 import { logger } from '../common/utils'
 import { RequesLoggerMiddleware } from './middlewares/request_logger.middleware'
 import cors from 'cors'
+import cookieparser from 'cookie-parser'
 import fileupload from 'express-fileupload'
 interface Options {
   port?: number
@@ -24,6 +25,7 @@ export class Server {
     this.app.use(fileupload({ useTempFiles: true, tempFileDir: './temp' }))
     this.app.use(express.urlencoded({ extended: false }))
     this.app.use(express.json())
+    this.app.use(cookieparser())
     this.app.use(RequesLoggerMiddleware.LogerRequest())
     this.app.use(this.routes)
 
