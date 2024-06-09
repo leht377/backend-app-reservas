@@ -8,7 +8,10 @@ import { TokenPayload, UserToken } from '../../interfaces'
 import { RestauranteRepository, UsuarioRepository } from '../../repositories'
 import { RegistrarRestaurante } from '../restaurante'
 import { RegistrarUsuario } from '../usuario'
-type SignToken = (payload: TokenPayload, duration?: string) => Promise<string | null>
+type SignToken = (
+  payload: TokenPayload,
+  duration?: string
+) => Promise<string | null>
 export class RegistrarRestauranteUsuario {
   constructor(
     private readonly usuarioRepository: UsuarioRepository,
@@ -35,10 +38,9 @@ export class RegistrarRestauranteUsuario {
       usuario_id: usuario?.getId()
     })
 
-    const restaurante = await new RegistrarRestaurante(this.restauranteRepository).execute(
-      registrarRestuaranteDto,
-      session
-    )
+    const restaurante = await new RegistrarRestaurante(
+      this.restauranteRepository
+    ).execute(registrarRestuaranteDto, session)
 
     const tokenPayload: TokenPayload = {
       correo: usuario?.getCorreo(),
@@ -51,14 +53,16 @@ export class RegistrarRestauranteUsuario {
     const refreshToken = await this.singRefreshToken(tokenPayload, '1d')
 
     if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
-    if (!refreshToken) throw CustomErrors.internalServer('refreshToken no pudo ser firmado')
+    if (!refreshToken)
+      throw CustomErrors.internalServer('refreshToken no pudo ser firmado')
     return {
       token: token,
       refreshToken: refreshToken,
       usuario: {
         id: usuario.getId(),
         correo: usuario.getCorreo(),
-        rol: usuario.getRol()
+        rol: usuario.getRol(),
+        rol_usuario_id: restaurante?.getId()
       }
     }
   }

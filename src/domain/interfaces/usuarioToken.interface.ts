@@ -5,6 +5,7 @@ export interface UserToken {
     id: string
     correo: string
     rol: string
+    rol_usuario_id: string
   }
 }
 

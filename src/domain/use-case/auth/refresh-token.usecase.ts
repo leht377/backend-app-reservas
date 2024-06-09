@@ -3,7 +3,10 @@ import { RefreshTokenDto } from '../../dtos'
 import { CustomErrors } from '../../errors'
 import { TokenPayload, UserToken } from '../../interfaces'
 type DecodedToken<T> = T | null
-type SignToken = (payload: TokenPayload, duration?: string) => Promise<string | null>
+type SignToken = (
+  payload: TokenPayload,
+  duration?: string
+) => Promise<string | null>
 type ValidateToken = <T>(token: string) => Promise<DecodedToken<T>>
 
 export class RefreshToken {
@@ -16,11 +19,11 @@ export class RefreshToken {
 
   async execute(refreshTokenDto: RefreshTokenDto): Promise<UserToken> {
     const { refresh_token } = refreshTokenDto
-    const payloadDecodeRefreshToken: TokenPayload | null = await this.validateRefreshToken(
-      refresh_token
-    )
+    const payloadDecodeRefreshToken: TokenPayload | null =
+      await this.validateRefreshToken(refresh_token)
 
-    if (!payloadDecodeRefreshToken) throw CustomErrors.unautorized('token perdido')
+    if (!payloadDecodeRefreshToken)
+      throw CustomErrors.unautorized('token perdido')
 
     const payload: TokenPayload = {
       correo: payloadDecodeRefreshToken.correo,
@@ -32,7 +35,8 @@ export class RefreshToken {
     const refreshToken = await this.singRefreshToken(payload, '1d')
 
     if (!token) throw CustomErrors.internalServer('Token no pudo ser firmado')
-    if (!refreshToken) throw CustomErrors.internalServer('refreshToken no pudo ser firmado')
+    if (!refreshToken)
+      throw CustomErrors.internalServer('refreshToken no pudo ser firmado')
 
     const userToken: UserToken = {
       refreshToken: refreshToken,
@@ -40,7 +44,8 @@ export class RefreshToken {
       usuario: {
         id: payload.usuario_id,
         correo: payload.correo,
-        rol: payload.rol
+        rol: payload.rol,
+        rol_usuario_id: payload.id
       }
     }
     return userToken
