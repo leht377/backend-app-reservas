@@ -1,3 +1,4 @@
+import { DiasServicioRestaurante, HorasServicioRestaurante } from '../../../common/utils'
 import { CustomErrors } from '../../errors'
 
 export class ActualizarRestauranteDto {
@@ -18,7 +19,7 @@ export class ActualizarRestauranteDto {
   ) {}
 
   static crear(objecto: { [key: string]: any }): ActualizarRestauranteDto {
-    const {
+    let {
       id,
       nombre,
       descripcion,
@@ -51,8 +52,24 @@ export class ActualizarRestauranteDto {
       throw CustomErrors.badRequest('La foto del restaurante debe ser una cadena de texto')
     if (horas_servicios && !Array.isArray(horas_servicios))
       throw CustomErrors.badRequest('Las horas de servicio deben ser un array de cadenas de texto')
+    if (horas_servicios) {
+      for (const d of horas_servicios) {
+        if (!Object.values(HorasServicioRestaurante).includes(d)) {
+          throw CustomErrors.badRequest(`${d} No es una hora valida`)
+        }
+      }
+      horas_servicios = [...new Set(horas_servicios)]
+    }
     if (dias_servicios && !Array.isArray(dias_servicios))
       throw CustomErrors.badRequest('Los días de servicio deben ser un array de cadenas de texto')
+    if (dias_servicios) {
+      for (const d of dias_servicios) {
+        if (!Object.values(DiasServicioRestaurante).includes(d)) {
+          throw CustomErrors.badRequest(`${d} No es un dia valido`)
+        }
+      }
+      dias_servicios = [...new Set(dias_servicios)]
+    }
     if (cantidad_resenas && typeof cantidad_resenas !== 'number')
       throw CustomErrors.badRequest('La cantidad de reseñas debe ser un numero')
     if (calificacion && typeof calificacion !== 'number')

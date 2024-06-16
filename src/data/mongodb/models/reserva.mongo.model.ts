@@ -8,7 +8,7 @@ interface ReservaDocument extends Document {
   cantidad_personas: number
   estado: EstadoReserva
   fecha_reserva: Date
-  hora_reserva: Date
+  hora_reserva: string
   cod_ingreso: string | null
 }
 
@@ -53,14 +53,8 @@ const reservaSchema = new Schema<ReservaDocument>({
     default: null
   },
   hora_reserva: {
-    type: Date,
-    required: true,
-    validate: {
-      validator: function (value: Date) {
-        return !isNaN(value.getTime())
-      },
-      message: 'La hora de reserva debe ser una fecha válida'
-    }
+    type: String,
+    required: true
   }
 })
 

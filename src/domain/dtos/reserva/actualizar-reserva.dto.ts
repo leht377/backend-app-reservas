@@ -8,7 +8,7 @@ export class ActualizarReservaDto {
     public readonly cantidad_personas?: number,
     public readonly estado_reserva?: EstadoReserva,
     public readonly fecha_reserva?: Date,
-    public readonly hora_reserva?: Date,
+    public readonly hora_reserva?: string,
     public readonly codigo_ingreso?: string
   ) {}
 
@@ -55,10 +55,7 @@ export class ActualizarReservaDto {
     }
 
     if (hora_reserva) {
-      horaReservaDate = new Date(hora_reserva)
-      if (isNaN(horaReservaDate.getTime())) {
-        throw CustomErrors.badRequest('El campo "hora_reserva" debe ser del tipo Date')
-      }
+      if (!hora_reserva) throw CustomErrors.badRequest('El campo "hora_reserva" es requerido ')
     }
 
     return new ActualizarReservaDto(

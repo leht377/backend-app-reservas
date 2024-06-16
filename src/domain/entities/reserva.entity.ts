@@ -9,7 +9,7 @@ export class ReservaEntity {
     private readonly cantidad_personas: string,
     private readonly estado: EstadoReserva,
     private readonly fecha_reserva: Date,
-    private readonly hora_reserva: Date,
+    private readonly hora_reserva: string,
     private readonly cod_ingreso?: string
   ) {}
 
@@ -40,7 +40,7 @@ export class ReservaEntity {
     return this.fecha_reserva
   }
 
-  getHoraReserva(): Date {
+  getHoraReserva(): string {
     return this.hora_reserva
   }
 

@@ -6,7 +6,7 @@ export class SolicitarReservaDto {
     public readonly cliente_id: string,
     public readonly nombre_reservante: string,
     public readonly fecha_reserva: Date,
-    public readonly hora_reserva: Date,
+    public readonly hora_reserva: string,
     public readonly cantidad_personas: number,
     public readonly usuario_id_token: string
   ) {}
@@ -50,11 +50,11 @@ export class SolicitarReservaDto {
     }
 
     // Convertir la cadena de hora en objeto Date
-    const horaReservaDate = new Date(hora_reserva)
-    if (isNaN(horaReservaDate.getTime())) {
-      throw CustomErrors.badRequest('El campo "hora_reserva" debe ser una fecha válida')
-    }
-
+    // const horaReservaDate = new Date(hora_reserva)
+    // if (isNaN(horaReservaDate.getTime())) {
+    //   throw CustomErrors.badRequest('El campo "hora_reserva" debe ser una fecha válida')
+    // }
+    if (!hora_reserva) throw CustomErrors.badRequest('El campo "hora_reserva" es requerido ')
     return new SolicitarReservaDto(
       restaurante_id,
       cliente_id,

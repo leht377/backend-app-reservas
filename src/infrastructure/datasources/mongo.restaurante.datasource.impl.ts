@@ -36,35 +36,40 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
     } = actualizarRestauranteDto
 
     if (!isValidObjectId(id)) throw CustomErrors.badRequest('El id del restaurante no es valido')
+    try {
+      let session: ClientSession | undefined
+      session = options?.session
 
-    let session: ClientSession | undefined
-    session = options?.session
+      const data: UpdateQuery<RestauranteDocument> = {
+        descripcion: descripcion,
+        dias_servicio: dias_servicios,
+        url_fotos_restaurantes: foto_restaurante,
+        horas_servicio: horas_servicios,
+        locacion: localizacion,
+        nombre: nombre,
+        menu_id: menu_id,
+        calificacion: calificacion,
+        cantidad_resenas: cantidad_resenas,
+        calificacion_promedio: calificacion_promedio
+      }
 
-    const data: UpdateQuery<RestauranteDocument> = {
-      descripcion: descripcion,
-      dias_servicio: dias_servicios,
-      url_fotos_restaurantes: foto_restaurante,
-      horas_servicio: horas_servicios,
-      locacion: localizacion,
-      nombre: nombre,
-      menu_id: menu_id,
-      calificacion: calificacion,
-      cantidad_resenas: cantidad_resenas,
-      calificacion_promedio: calificacion_promedio
+      const restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true,
+        session: session
+      }).populate('usuario_id')
+
+      if (!restauranteActualizado)
+        throw CustomErrors.badRequest(`No existe ningun restaurante identificado con el id: ${id}`)
+
+      return RestauranteMapper.RestauranteDetalladoEntityFromObject(
+        restauranteActualizado?.toObject()
+      )
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError)
+        throw CustomErrors.badRequest(error.message)
+      throw error
     }
-
-    const restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {
-      new: true,
-      runValidators: true,
-      session: session
-    }).populate('usuario_id')
-
-    if (!restauranteActualizado)
-      throw CustomErrors.badRequest(`No existe ningun restaurante identificado con el id: ${id}`)
-
-    return RestauranteMapper.RestauranteDetalladoEntityFromObject(
-      restauranteActualizado?.toObject()
-    )
   }
 
   async obtenerRestaurantes(
@@ -76,7 +81,7 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       populate: 'usuario_id'
     }
 
-    const documentos = await RestuaranteModelo.paginate({ visible: false }, options)
+    const documentos = await RestuaranteModelo.paginate({ visible: true }, options)
     const { docs, ...rest } = documentos
     const restaurantes: RestauranteDocument[] = docs
 
