@@ -1,5 +1,5 @@
 import { ObtnerReservaDto } from '../../dtos'
-import { ReservaEntity } from '../../entities'
+import { ReservaDetalladoEntity, ReservaEntity } from '../../entities'
 import { ClienteRepository, ReservaRepository } from '../../repositories'
 import { ObtenerClientePorId } from './obterner-cliente-id.usecase'
 
@@ -9,7 +9,7 @@ export class ObtenerReservasCliente {
     private readonly clienteRepository: ClienteRepository
   ) {}
 
-  async execute(obtenerReservasDto: ObtnerReservaDto): Promise<ReservaEntity[]> {
+  async execute(obtenerReservasDto: ObtnerReservaDto): Promise<ReservaDetalladoEntity[]> {
     const { cliente_id } = obtenerReservasDto
     const cliente = await new ObtenerClientePorId(this.clienteRepository).execute(cliente_id)
 
