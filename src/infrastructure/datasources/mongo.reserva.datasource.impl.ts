@@ -1,8 +1,10 @@
-import mongoose, { UpdateQuery, isValidObjectId } from 'mongoose'
+import mongoose, { Mongoose, UpdateQuery, isValidObjectId } from 'mongoose'
 import {
   ActualizarReservaDto,
   CustomErrors,
   ObtenerReservaPorIdDto,
+  ObtenerRestauranteDto,
+  ObtnerReservaDto,
   ReservaDatasource,
   ReservaEntity,
   SolicitarReservaDto
@@ -11,6 +13,25 @@ import { ReservaDocument, ReservaModel } from '../../data'
 import { ReservaMapper } from '../mappers'
 
 export class MongoReservaDatasourceImpl implements ReservaDatasource {
+  async obtenerReservasPorClienteId(
+    obtenerReservasDto: ObtnerReservaDto
+  ): Promise<ReservaEntity[]> {
+    try {
+      const {
+        cliente_id,
+        query: { estado }
+      } = obtenerReservasDto
+      let queryReserva: mongoose.FilterQuery<ReservaDocument> = { cliente_id: cliente_id }
+      if (estado) queryReserva = { cliente_id, estado }
+
+      const reservas = await ReservaModel.find(queryReserva)
+      return reservas?.map((reserva) => ReservaMapper.ReservaEntityFromObject(reserva?.toObject()))
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError)
+        throw CustomErrors.badRequest(error.message)
+      throw error
+    }
+  }
   async obtenerReservaPorId(
     obtenerReservaPorIdDto: ObtenerReservaPorIdDto
   ): Promise<ReservaEntity | null> {

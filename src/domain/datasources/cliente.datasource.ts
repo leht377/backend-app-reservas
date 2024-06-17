@@ -11,9 +11,11 @@ export abstract class ClienteDataSource {
 
   abstract obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity>
   abstract obtenerClientePorUsuarioId(id: string): Promise<ClienteDetalladoEntity | null>
+
   abstract agregarRestauranteFavorito(
     agregarFavoritoDto: AgregarFavoritoDto
   ): Promise<ClienteDetalladoEntity>
+
   abstract eliminarRestauranteFavorito(
     eliminarFavoritoDto: EliminarFavoritoDto
   ): Promise<ClienteDetalladoEntity>

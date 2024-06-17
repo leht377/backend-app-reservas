@@ -8,6 +8,8 @@ import {
   CustomErrors,
   EliminarFavoritoDto,
   ObtenerClientePorId,
+  ObtenerReservasCliente,
+  ObtnerReservaDto,
   ReservaRepository,
   eliminarFavorito
 } from '../../domain'
@@ -51,6 +53,30 @@ export class ClienteController {
       ).execute(cancelarReservaDto)
 
       res.json(reserva)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  obtenerReservas = async (req: Request, res: Response, next: NextFunction) => {
+    const usuario = req.body.usuarioToken
+    const cliente_id = req.params?.id_cliente
+    const usuario_rol_id = usuario?.usuario_rol_id
+    const { query = {} } = req
+
+    try {
+      if (cliente_id?.toString() != usuario_rol_id?.toString())
+        throw CustomErrors.badRequest(
+          'El cliente no se encuentra autorizado para consultar esta informacion'
+        )
+
+      const obtenerReservasDto = ObtnerReservaDto.crear({ cliente_id, query })
+      const reservas = await new ObtenerReservasCliente(
+        this.reservaRepository,
+        this.clienteRepository
+      ).execute(obtenerReservasDto)
+
+      res.json(reservas)
     } catch (error) {
       next(error)
     }

@@ -1,6 +1,8 @@
 import {
   ActualizarReservaDto,
   ObtenerReservaPorIdDto,
+  ObtenerRestauranteDto,
+  ObtnerReservaDto,
   ReservaDatasource,
   ReservaEntity,
   ReservaRepository,
@@ -9,6 +11,9 @@ import {
 
 export class ReservaRepositoryImpl implements ReservaRepository {
   constructor(private readonly reservaDatasource: ReservaDatasource) {}
+  obtenerReservasPorClienteId(obtenerReservasDto: ObtnerReservaDto): Promise<ReservaEntity[]> {
+    return this.reservaDatasource.obtenerReservasPorClienteId(obtenerReservasDto)
+  }
   obtenerReservaPorId(
     obtenerReservaPorIdDto: ObtenerReservaPorIdDto
   ): Promise<ReservaEntity | null> {

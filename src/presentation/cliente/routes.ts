@@ -34,6 +34,11 @@ export class ClienteRoutes {
       AuthMiddleware.ValidateJWT,
       controller.cancelarReserva
     )
+    router.get(
+      '/:id_cliente/reservas',
+      [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],
+      controller.obtenerReservas
+    )
     return router
   }
 }

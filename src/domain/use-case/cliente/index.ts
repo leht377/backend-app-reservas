@@ -1,5 +1,6 @@
 export * from './agregar-favorito.usecase'
 export * from './cancelar-reserva.usecase'
 export * from './eliminar-favorito.usecase'
+export * from './obtener-reservas.usecase'
 export * from './obterner-cliente-id.usecase'
 export * from './resgistrar-cliente.usecase'
