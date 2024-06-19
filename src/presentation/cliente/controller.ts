@@ -10,6 +10,7 @@ import {
   ObtenerClientePorId,
   ObtenerReservasCliente,
   ObtnerReservaDto,
+  ObtnerRestaurantesFavoritos,
   ReservaRepository,
   eliminarFavorito
 } from '../../domain'
@@ -114,6 +115,25 @@ export class ClienteController {
         eliminarFavoritoDto
       )
       res.json(cliente)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  obtenerRestaurantesFavoritos = async (req: Request, res: Response, next: NextFunction) => {
+    const cliente_id = req.params?.id_cliente
+    const cliente_id_token = req.body?.usuarioToken?.usuario_rol_id
+
+    try {
+      if (cliente_id?.toString() != cliente_id_token?.toString()) {
+        throw CustomErrors.badRequest('No cuentas con permiso consultar esta información')
+      }
+
+      const restaurantes = await new ObtnerRestaurantesFavoritos(this.clienteRepository).execute(
+        cliente_id
+      )
+
+      res.json(restaurantes)
     } catch (error) {
       next(error)
     }

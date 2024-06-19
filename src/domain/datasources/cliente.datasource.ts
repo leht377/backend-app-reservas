@@ -1,6 +1,6 @@
 import { AgregarFavoritoDto, EliminarFavoritoDto } from '../dtos'
 import { RegistrarClienteDto } from '../dtos/cliente/registrar-cliente.dto'
-import { ClienteDetalladoEntity, ClienteEntity } from '../entities'
+import { ClienteDetalladoEntity, ClienteEntity, RestauranteDetalladoEntity } from '../entities'
 import { OptionsRegistrarCliente } from '../interfaces'
 
 export abstract class ClienteDataSource {
@@ -11,7 +11,7 @@ export abstract class ClienteDataSource {
 
   abstract obtenerClientePorId(id: string): Promise<ClienteDetalladoEntity>
   abstract obtenerClientePorUsuarioId(id: string): Promise<ClienteDetalladoEntity | null>
-
+  abstract obtenerRestaurantesFavoritos(id: string): Promise<RestauranteDetalladoEntity[]>
   abstract agregarRestauranteFavorito(
     agregarFavoritoDto: AgregarFavoritoDto
   ): Promise<ClienteDetalladoEntity>
