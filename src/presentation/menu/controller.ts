@@ -9,6 +9,8 @@ import {
 import { RegistrarMenu } from '../../domain/use-case/menu'
 import { RegistrarPlato } from '../../domain/use-case/plato'
 import { RegistrarPlatoDto } from '../../domain/dtos/plato'
+import { ObtenerMenuDto } from '../../domain/dtos/menu/obtener-menu.dto'
+import { ObtenerMenu } from '../../domain/use-case/menu/obtener-menu.usecase'
 
 export class MenuController {
   constructor(
@@ -49,6 +51,16 @@ export class MenuController {
       res.json(plato)
     } catch (error) {
       await this.transationManager.abort(session)
+      next(error)
+    }
+  }
+
+  obtenerMenu = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const obtenerMenuDto = ObtenerMenuDto.crear({ menu_id: req.params?.id })
+      const menu = await new ObtenerMenu(this.menuRepository).execute(obtenerMenuDto)
+      res.json(menu)
+    } catch (error) {
       next(error)
     }
   }

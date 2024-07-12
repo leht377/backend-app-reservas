@@ -1,4 +1,5 @@
 import { AgregarPlatoDto, RegistrarMenuDto } from '../dtos/menu'
+import { ObtenerMenuDto } from '../dtos/menu/obtener-menu.dto'
 import { MenuEntity } from '../entities'
 import { OptiosAgregarPlatoMenu, OptiosRegistrarMenu } from '../interfaces'
 
@@ -12,4 +13,6 @@ export abstract class MenuRepository {
     agregarPlatoDto: AgregarPlatoDto,
     options?: OptiosAgregarPlatoMenu
   ): Promise<void>
+
+  abstract obtenerMenu(obtenerMenuDto: ObtenerMenuDto): Promise<MenuEntity>
 }
