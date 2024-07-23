@@ -36,7 +36,7 @@ export class MenuRoutes {
     )
     router.post('/', AuthMiddleware.ValidateJWT, controller.registrarMenu)
     router.post('/:id/platos', AuthMiddleware.ValidateJWT, controller.registrarPlato)
-    router.get('/:id', AuthMiddleware.ValidateJWT, controller.obtenerMenu)
+    router.get('/:id', controller.obtenerMenu)
     return router
   }
 }
