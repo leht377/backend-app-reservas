@@ -50,8 +50,20 @@ export class ActualizarRestauranteDto {
       throw CustomErrors.badRequest('La localización debe ser una cadena de texto')
     if (foto_restaurante && typeof foto_restaurante !== 'string')
       throw CustomErrors.badRequest('La foto del restaurante debe ser una cadena de texto')
-    if (horas_servicios && !Array.isArray(horas_servicios))
-      throw CustomErrors.badRequest('Las horas de servicio deben ser un array de cadenas de texto')
+
+    if (horas_servicios && !Array.isArray(horas_servicios)) {
+      try {
+        horas_servicios = JSON.parse(horas_servicios)
+        if (!Array.isArray(horas_servicios)) {
+          throw CustomErrors.badRequest(
+            'Las horas de servicio deben ser un array de cadenas de texto'
+          )
+        }
+      } catch (error) {
+        throw CustomErrors.badRequest('El formato de horas_servicios no es válido')
+      }
+    }
+
     if (horas_servicios) {
       for (const d of horas_servicios) {
         if (!Object.values(HorasServicioRestaurante).includes(d)) {
@@ -60,8 +72,17 @@ export class ActualizarRestauranteDto {
       }
       horas_servicios = [...new Set(horas_servicios)]
     }
-    if (dias_servicios && !Array.isArray(dias_servicios))
-      throw CustomErrors.badRequest('Los días de servicio deben ser un array de cadenas de texto')
+    if (dias_servicios && !Array.isArray(dias_servicios)) {
+      try {
+        dias_servicios = JSON.parse(dias_servicios)
+        if (!Array.isArray(dias_servicios)) {
+          throw CustomErrors.badRequest('Los dias_servicios deben ser un array de cadenas de texto')
+        }
+      } catch (error) {
+        throw CustomErrors.badRequest('El formato de dias_servicios no es válido')
+      }
+    }
+
     if (dias_servicios) {
       for (const d of dias_servicios) {
         if (!Object.values(DiasServicioRestaurante).includes(d)) {

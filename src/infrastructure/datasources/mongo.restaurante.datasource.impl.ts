@@ -81,6 +81,7 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       populate: 'usuario_id'
     }
 
+    // const documentos = await RestuaranteModelo.paginate({ visible: true }, options)
     const documentos = await RestuaranteModelo.paginate({ visible: true }, options)
     const { docs, ...rest } = documentos
     const restaurantes: RestauranteDocument[] = docs
