@@ -66,7 +66,6 @@ export class RestauranteController {
     const restaurante_id = req.params?.id
     const usuario_id = req?.body.usuarioToken?.id || req?.body.usuarioToken?._id
     let foto_restaurante
-    console.log(req.body)
     try {
       if (req.files) {
         const files = fileObjectGenerator(req.files!)

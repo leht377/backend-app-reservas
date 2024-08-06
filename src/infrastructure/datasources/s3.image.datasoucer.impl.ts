@@ -1,5 +1,6 @@
 import { envs } from '../../config'
 import fs from 'fs'
+import { v4 as uuidv4 } from 'uuid'
 import { ImageDatasouce, UploadImageDto } from '../../domain'
 import {
   S3Client,
@@ -24,7 +25,7 @@ export class S3ImageDatasourceImpl implements ImageDatasouce {
       const uploadPromises = files.map(({ nombre, tempFilePath }) => {
         const stream = fs.createReadStream(tempFilePath)
         let fileName
-        fileName = nombre.replace(/\s+/g, '')
+        fileName = uuidv4().replace(/-/g, '') + nombre.replace(/\s+/g, '')
         filesNames.push(`${envs.AWS_URI_OBJECT}/${fileName}`)
         const uploadParams = {
           Bucket: envs.AWS_BUCKET_NAME,

@@ -52,8 +52,9 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
         cantidad_resenas: cantidad_resenas,
         calificacion_promedio: calificacion_promedio
       }
+      let restauranteActualizado
 
-      const restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {
+      restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(id, data, {
         new: true,
         runValidators: true,
         session: session
@@ -62,8 +63,33 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       if (!restauranteActualizado)
         throw CustomErrors.badRequest(`No existe ningun restaurante identificado con el id: ${id}`)
 
+      let sePuedeHacerVisible = false
+
+      if (
+        restauranteActualizado?.descripcion &&
+        restauranteActualizado?.dias_servicio &&
+        restauranteActualizado?.dias_servicio?.length > 0 &&
+        restauranteActualizado?.url_fotos_restaurantes &&
+        restauranteActualizado?.url_fotos_restaurantes?.length > 0 &&
+        restauranteActualizado?.horas_servicio &&
+        restauranteActualizado?.horas_servicio?.length > 0
+      )
+        sePuedeHacerVisible = true
+
+      if (sePuedeHacerVisible) {
+        restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(
+          id,
+          { visible: true },
+          {
+            new: true,
+            runValidators: true,
+            session: session
+          }
+        ).populate('usuario_id')
+      }
+
       return RestauranteMapper.RestauranteDetalladoEntityFromObject(
-        restauranteActualizado?.toObject()
+        restauranteActualizado?.toObject()!!
       )
     } catch (error) {
       if (error instanceof mongoose.Error.ValidationError)
