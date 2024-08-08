@@ -1,9 +1,13 @@
 import { CustomErrors } from '../../errors'
 
 export class ObtenerRestauranteDto {
-  private constructor(public readonly page: number, public readonly limit: number) {}
+  private constructor(
+    public readonly page: number,
+    public readonly limit: number,
+    public readonly nombre: string
+  ) {}
   static crear(objecto: { [key: string]: any }): ObtenerRestauranteDto {
-    let { limit, page } = objecto
+    let { limit, page, nombre } = objecto
 
     // Si limit no está definido o es nulo, se asigna el valor predeterminado 10
     limit = limit ? parseInt(limit, 10) : 10
@@ -20,6 +24,9 @@ export class ObtenerRestauranteDto {
       throw CustomErrors.badRequest('La page debe ser un número entero')
     }
 
-    return new ObtenerRestauranteDto(page, limit)
+    if (nombre && typeof nombre != 'string')
+      throw CustomErrors.badRequest('El nombre debe de ser string')
+
+    return new ObtenerRestauranteDto(page, limit, nombre)
   }
 }

@@ -106,9 +106,17 @@ export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
       limit: obtenerRestauranteDto.limit,
       populate: 'usuario_id'
     }
+    const nombreBusqueda = obtenerRestauranteDto.nombre
+      ? new RegExp(obtenerRestauranteDto.nombre, 'i')
+      : null
 
+    // Construir la consulta
+    const consulta: Record<string, any> = { visible: true }
+    if (nombreBusqueda) {
+      consulta.nombre = nombreBusqueda
+    }
     // const documentos = await RestuaranteModelo.paginate({ visible: true }, options)
-    const documentos = await RestuaranteModelo.paginate({ visible: true }, options)
+    const documentos = await RestuaranteModelo.paginate(consulta, options)
     const { docs, ...rest } = documentos
     const restaurantes: RestauranteDocument[] = docs
 
