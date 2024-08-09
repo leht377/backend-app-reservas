@@ -11,5 +11,7 @@ export const envs = {
   AWS_BUCKET_REGION: get('AWS_BUCKET_REGION').required().asString(),
   AWS_PUBLIC_KEY: get('AWS_PUBLIC_KEY').required().asString(),
   AWS_SECRET_KEY: get('AWS_SECRET_KEY').required().asString(),
-  AWS_URI_OBJECT: get('AWS_URI_OBJECT').required().asString()
+  AWS_URI_OBJECT: get('AWS_URI_OBJECT').required().asString(),
+  USER_EMAIL: get('USER_EMAIL').required().asString(),
+  PASS_SERVICIO_GMAIL: get('PASS_SERVICIO_GMAIL').required().asString()
 }
