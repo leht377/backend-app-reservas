@@ -16,11 +16,7 @@ const plantilla_reserva_pendiente_cliente = (
   const date = new Date(reservaInfo?.getFechaReserva())
   const formattedDate = date.toISOString().split('T')[0]
 
-  const dateH = new Date(reservaInfo?.getHoraReserva())
-  const hours = String(dateH.getUTCHours()).padStart(2, '0')
-  const minutes = String(dateH.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(dateH.getUTCSeconds()).padStart(2, '0')
-  const formattedTime = `${hours}:${minutes}:${seconds}`
+  const formattedTime = reservaInfo?.getHoraReserva()
   return `
   <!DOCTYPE html>
   <html>
@@ -107,12 +103,7 @@ const plantilla_reserva_pendiente_restaurante = (
 ): string => {
   const date = new Date(reservaInfo?.getFechaReserva())
   const formattedDate = date.toISOString().split('T')[0]
-
-  const dateH = new Date(reservaInfo?.getHoraReserva())
-  const hours = String(dateH.getUTCHours()).padStart(2, '0')
-  const minutes = String(dateH.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(dateH.getUTCSeconds()).padStart(2, '0')
-  const formattedTime = `${hours}:${minutes}:${seconds}`
+  const formattedTime = reservaInfo?.getHoraReserva()
   return `
     <!DOCTYPE html>
     <html>
@@ -200,11 +191,7 @@ const plantilla_reserva_aceptada_cliente = (
   const date = new Date(reservaInfo?.getFechaReserva())
   const formattedDate = date.toISOString().split('T')[0]
 
-  const dateH = new Date(reservaInfo?.getHoraReserva())
-  const hours = String(dateH.getUTCHours()).padStart(2, '0')
-  const minutes = String(dateH.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(dateH.getUTCSeconds()).padStart(2, '0')
-  const formattedTime = `${hours}:${minutes}:${seconds}`
+  const formattedTime = reservaInfo?.getHoraReserva()
   return `
          <!DOCTYPE html>
     <html>
@@ -285,12 +272,7 @@ const plantilla_reserva_rechazada_cliente = (
 ): string => {
   const date = new Date(reservaInfo?.getFechaReserva())
   const formattedDate = date.toISOString().split('T')[0]
-
-  const dateH = new Date(reservaInfo?.getHoraReserva())
-  const hours = String(dateH.getUTCHours()).padStart(2, '0')
-  const minutes = String(dateH.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(dateH.getUTCSeconds()).padStart(2, '0')
-  const formattedTime = `${hours}:${minutes}:${seconds}`
+  const formattedTime = reservaInfo?.getHoraReserva()
   return `
  <!DOCTYPE html>
 <html>
@@ -378,11 +360,7 @@ const plantilla_reserva_cancelada_cliente = (
   const date = new Date(reservaInfo?.getFechaReserva())
   const formattedDate = date.toISOString().split('T')[0]
 
-  const dateH = new Date(reservaInfo?.getHoraReserva())
-  const hours = String(dateH.getUTCHours()).padStart(2, '0')
-  const minutes = String(dateH.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(dateH.getUTCSeconds()).padStart(2, '0')
-  const formattedTime = `${hours}:${minutes}:${seconds}`
+  const formattedTime = reservaInfo?.getHoraReserva()
   return `
 <!DOCTYPE html>
 <html>
