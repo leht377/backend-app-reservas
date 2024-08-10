@@ -12,6 +12,7 @@ import {
 } from '../../domain'
 import { ReservaDocument, ReservaModel } from '../../data'
 import { ReservaMapper } from '../mappers'
+import generateCode from '../../common/utils/generarCode'
 
 export class MongoReservaDatasourceImpl implements ReservaDatasource {
   async obtenerReservasPorClienteId(
@@ -72,8 +73,7 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         estado: estado_reserva,
         fecha_reserva: fecha_reserva,
         hora_reserva: hora_reserva,
-        nombre_reservante: nombre_reservante,
-        cod_ingreso: codigo_ingreso
+        nombre_reservante: nombre_reservante
       }
 
       const reservaActualizada = await ReservaModel.findByIdAndUpdate(reserva_id, data, {
@@ -106,15 +106,17 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         throw CustomErrors.badRequest('El cliente_id no es un id valido')
       if (!isValidObjectId(restaurante_id))
         throw CustomErrors.badRequest('El restaurante_id no es un id valido')
-
+      // const code = generateCode()
       const reserva = new ReservaModel({
         cliente_id: cliente_id,
         fecha_reserva: fecha_reserva,
         hora_reserva: hora_reserva,
         nombre_reservante: nombre_reservante,
         cantidad_personas: cantidad_personas,
-        restaurante_id: restaurante_id
+        restaurante_id: restaurante_id,
+        cod_ingreso: generateCode()
       })
+
       const reservaGuardada = await reserva.save()
       return ReservaMapper.ReservaEntityFromObject(reservaGuardada?.toObject())
     } catch (error) {

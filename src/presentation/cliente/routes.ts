@@ -34,11 +34,7 @@ export class ClienteRoutes {
       [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],
       controller.eliminarRestauranteFavorito
     )
-    router.put(
-      '/:id_cliente/reservas/:id_reserva/cancelar',
-      AuthMiddleware.ValidateJWT,
-      controller.cancelarReserva
-    )
+
     router.get(
       '/:id_cliente/reservas',
       [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],

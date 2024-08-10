@@ -49,17 +49,6 @@ export class RestauranteRoutes {
       controller.calificarRestaurante
     )
 
-    router.put(
-      '/:id_restaurante/reservas/:id_reserva/aceptar',
-      AuthMiddleware.ValidateJWT,
-      controller.aceptarReserva
-    )
-
-    router.put(
-      '/:id_restaurante/reservas/:id_reserva/rechazar',
-      AuthMiddleware.ValidateJWT,
-      controller.rechazarReserva
-    )
     router.get('/', controller.obtenerRestaurantes)
     return router
   }

@@ -28,6 +28,7 @@
     "/src/domain/dtos/reserva",
     "/src/domain/dtos/image",
     "/src/domain/use-case/image",
-    "/src/domain/dtos/calificacion"
+    "/src/domain/dtos/calificacion",
+    "/src/domain/use-case/reserva"
   ]
 }

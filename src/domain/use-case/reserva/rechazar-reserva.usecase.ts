@@ -2,14 +2,20 @@ import { EstadoReserva } from '../../../common/utils'
 import { ActualizarReservaDto, ObtenerReservaPorIdDto, RechazarReservaDto } from '../../dtos'
 import { ReservaEntity } from '../../entities'
 import { CustomErrors } from '../../errors'
-import { ReservaRepository, RestauranteRepository } from '../../repositories'
-import { ObtenerReservaPorId } from '../reserva/obtener-reserva-por-id.usecase'
-import { ObtenerRestaurantePorId } from './obtener-restaurante-por-id.usecase'
+import { ClienteRepository, ReservaRepository, RestauranteRepository } from '../../repositories'
+import { ObtenerReservaPorId } from './obtener-reserva-por-id.usecase'
+import { ObtenerRestaurantePorId } from '../restaurante/obtener-restaurante-por-id.usecase'
+import { EmailRepository } from '../../repositories/email.repository'
+import { ObtenerClientePorId } from '../cliente'
+import { SentEmail } from '../email/sent-email.usecase'
+import { AsuntoEmailReservas, TypePlantillaEmail } from '../../../common/utils/enums/email.enum'
 
 export class RechazarReserva {
   constructor(
+    private readonly reservaRepository: ReservaRepository,
     private readonly restauranteRepository: RestauranteRepository,
-    private readonly reservaRepository: ReservaRepository
+    private readonly clienteRepository: ClienteRepository,
+    private readonly emailRepository: EmailRepository
   ) {}
 
   async execute(rechazarReservaDto: RechazarReservaDto): Promise<ReservaEntity> {
@@ -53,6 +59,19 @@ export class RechazarReserva {
     })
 
     const reservaActualizada = await this.reservaRepository.actualizarReserva(actualizarReservaDto)
+
+    const cliente = await new ObtenerClientePorId(this.clienteRepository).execute(
+      reservaActualizada.getClienteId()
+    )
+
+    await new SentEmail(this.emailRepository).execute(
+      cliente.getCorreo,
+      AsuntoEmailReservas.RECHAZADA,
+      TypePlantillaEmail.RESERVA_RECHAZADA_CLIENTE,
+      cliente,
+      restaurante,
+      reservaActualizada
+    )
     return reservaActualizada
   }
 }

@@ -2,19 +2,20 @@ import { EstadoReserva } from '../../../common/utils'
 import { AceptarReservaDto, ActualizarReservaDto, ObtenerReservaPorIdDto } from '../../dtos'
 import { ReservaEntity } from '../../entities'
 import { CustomErrors } from '../../errors'
-import { ReservaRepository, RestauranteRepository } from '../../repositories'
-import { ObtenerReservaPorId } from '../reserva/obtener-reserva-por-id.usecase'
-import { ObtenerRestaurantePorId } from './obtener-restaurante-por-id.usecase'
-function generarNumeroAleatorio() {
-  // Generar un número aleatorio de 6 dígitos
-  const numero = Math.floor(100000 + Math.random() * 900000)
-  return numero
-}
+import { ClienteRepository, ReservaRepository, RestauranteRepository } from '../../repositories'
+import { ObtenerReservaPorId } from './obtener-reserva-por-id.usecase'
+import { ObtenerRestaurantePorId } from '../restaurante/obtener-restaurante-por-id.usecase'
+import { EmailRepository } from '../../repositories/email.repository'
+import { ObtenerClientePorId } from '../cliente'
+import { SentEmail } from '../email/sent-email.usecase'
+import { AsuntoEmailReservas, TypePlantillaEmail } from '../../../common/utils/enums/email.enum'
 
 export class AceptarReserva {
   constructor(
+    private readonly reservaRepository: ReservaRepository,
     private readonly restauranteRepository: RestauranteRepository,
-    private readonly reservaRepository: ReservaRepository
+    private readonly clienteRepository: ClienteRepository,
+    private readonly emailRepository: EmailRepository
   ) {}
 
   async execute(aceptarReservaDto: AceptarReservaDto): Promise<ReservaEntity> {
@@ -54,11 +55,24 @@ export class AceptarReserva {
 
     const actualizarReservaDto = ActualizarReservaDto.crear({
       estado_reserva: EstadoReserva.ACEPTADA,
-      reserva_id,
-      codigo_ingreso: `${reserva.getClienteId().toString()}-${generarNumeroAleatorio()}`
+      reserva_id
     })
 
     const reservaActualizada = await this.reservaRepository.actualizarReserva(actualizarReservaDto)
+
+    const cliente = await new ObtenerClientePorId(this.clienteRepository).execute(
+      reservaActualizada.getClienteId()
+    )
+
+    await new SentEmail(this.emailRepository).execute(
+      cliente.getCorreo,
+      AsuntoEmailReservas.ACEPTADA,
+      TypePlantillaEmail.CONFIRMAR_RESERVA_CLIENTE,
+      cliente,
+      restaurante,
+      reservaActualizada
+    )
+
     return reservaActualizada
   }
 }

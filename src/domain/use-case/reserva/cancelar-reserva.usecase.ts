@@ -3,13 +3,19 @@ import { ActualizarReservaDto, ObtenerReservaPorIdDto, CancelarReservaDto } from
 import { ReservaEntity } from '../../entities'
 import { CustomErrors } from '../../errors'
 import { ClienteRepository, ReservaRepository, RestauranteRepository } from '../../repositories'
-import { ObtenerReservaPorId } from '../reserva/obtener-reserva-por-id.usecase'
-import { ObtenerClientePorId } from './obterner-cliente-id.usecase'
+import { ObtenerReservaPorId } from './obtener-reserva-por-id.usecase'
+import { ObtenerClientePorId } from '../cliente/obterner-cliente-id.usecase'
+import { EmailRepository } from '../../repositories/email.repository'
+import { SentEmail } from '../email/sent-email.usecase'
+import { AsuntoEmailReservas, TypePlantillaEmail } from '../../../common/utils/enums/email.enum'
+import { ObtenerRestaurantePorId } from '../restaurante'
 
 export class CancelarReserva {
   constructor(
-    private readonly clienteRespository: ClienteRepository,
-    private readonly reservaRepository: ReservaRepository
+    private readonly reservaRepository: ReservaRepository,
+    private readonly restauranteRepository: RestauranteRepository,
+    private readonly clienteRepository: ClienteRepository,
+    private readonly emailRepository: EmailRepository
   ) {}
 
   async execute(CancelarReservaDto: CancelarReservaDto): Promise<ReservaEntity> {
@@ -18,7 +24,7 @@ export class CancelarReserva {
     const rol_usuario = CancelarReservaDto.rol_usuario
     const usuario_rol_id = CancelarReservaDto.usuario_rol_id
 
-    const cliente = await new ObtenerClientePorId(this.clienteRespository).execute(cliente_id)
+    const cliente = await new ObtenerClientePorId(this.clienteRepository).execute(cliente_id)
 
     if (cliente.getUsuarioId().toString() != CancelarReservaDto.usuario_token_id?.toString())
       throw CustomErrors.badRequest(
@@ -51,6 +57,27 @@ export class CancelarReserva {
     })
 
     const reservaActualizada = await this.reservaRepository.actualizarReserva(actualizarReservaDto)
+    const restaurante = await new ObtenerRestaurantePorId(this.restauranteRepository).execute(
+      reservaActualizada?.getRestauranteId()
+    )
+
+    await new SentEmail(this.emailRepository).execute(
+      cliente.getCorreo,
+      AsuntoEmailReservas.CANCELADA,
+      TypePlantillaEmail.CANCELADA_RESERVA_CLIENTE,
+      cliente,
+      restaurante,
+      reservaActualizada
+    )
+    // await new SentEmail(this.emailRepository).execute(
+    //   restaurante?.getCorreo(),
+    //   AsuntoEmailReservas.CANCELADA,
+    //   TypePlantillaEmail.CANCELADA_RESERVA_CLIENTE,
+    //   cliente,
+    //   restaurante,
+    //   reservaActualizada
+    // )
+
     return reservaActualizada
   }
 }

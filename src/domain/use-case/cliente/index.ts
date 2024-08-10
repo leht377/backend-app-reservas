@@ -1,5 +1,4 @@
 export * from './agregar-favorito.usecase'
-export * from './cancelar-reserva.usecase'
 export * from './eliminar-favorito.usecase'
 export * from './obtener-reservas.usecase'
 export * from './obtener-restaurantes-favoritos.usecase'
