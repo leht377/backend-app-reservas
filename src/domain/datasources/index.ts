@@ -1,6 +1,7 @@
 export * from './calificacion.datasource'
 export * from './categoria.datasource'
 export * from './cliente.datasource'
+export * from './email.datasoucer'
 export * from './hashtag.datasource'
 export * from './image.datasource'
 export * from './menu.datasource'

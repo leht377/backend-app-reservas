@@ -5,6 +5,7 @@ import {
   ObtenerReservaPorIdDto,
   ObtenerRestauranteDto,
   ObtnerReservaDto,
+  ObtnerReservaRestauranteDto,
   ReservaDatasource,
   ReservaDetalladoEntity,
   ReservaEntity,
@@ -15,6 +16,30 @@ import { ReservaMapper } from '../mappers'
 import generateCode from '../../common/utils/generarCode'
 
 export class MongoReservaDatasourceImpl implements ReservaDatasource {
+  async obtenerReservasPorRestauranteId(
+    obtenerReservasDto: ObtnerReservaRestauranteDto
+  ): Promise<ReservaDetalladoEntity[]> {
+    try {
+      const {
+        restaurante_id,
+        query: { estado }
+      } = obtenerReservasDto
+      let queryReserva: mongoose.FilterQuery<ReservaDocument> = { restaurante_id: restaurante_id }
+      if (estado) queryReserva = { restaurante_id, estado }
+
+      const reservas = await ReservaModel.find(queryReserva).populate([
+        'cliente_id',
+        'restaurante_id'
+      ])
+      return reservas?.map((reserva) =>
+        ReservaMapper.ReservaDetalladoEntityFromObject(reserva?.toObject())
+      )
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError)
+        throw CustomErrors.badRequest(error.message)
+      throw error
+    }
+  }
   async obtenerReservasPorClienteId(
     obtenerReservasDto: ObtnerReservaDto
   ): Promise<ReservaDetalladoEntity[]> {

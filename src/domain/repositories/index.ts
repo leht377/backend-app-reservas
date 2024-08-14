@@ -1,6 +1,7 @@
 export * from './calificacion.repository'
 export * from './categoria.repository'
 export * from './cliente.repository'
+export * from './email.repository'
 export * from './hashtag.repository'
 export * from './image.repository'
 export * from './menu.repository'

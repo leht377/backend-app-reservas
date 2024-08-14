@@ -19,16 +19,19 @@ export class ClienteRoutes {
     const controller = new ClienteController(repository, reservaRepository)
 
     router.get('/:id', controller.obtenerClientePorId)
+
     router.put(
       '/:id_cliente/restaurantes/:id_restaurante/addfavorito',
       [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],
       controller.agregarRestauranteFavorito
     )
+
     router.get(
       '/:id_cliente/restaurantes/favoritos',
       [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],
       controller.obtenerRestaurantesFavoritos
     )
+
     router.put(
       '/:id_cliente/restaurantes/:id_restaurante/deletefavorito',
       [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],

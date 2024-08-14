@@ -1,3 +1,4 @@
+export * from './mailer.email.datasource.impl'
 export * from './mongo.calificacion.datasource.impl'
 export * from './mongo.categoria.datasource.impl'
 export * from './mongo.cliente.datasource.impl'

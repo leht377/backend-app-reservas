@@ -7,6 +7,8 @@ import {
   CustomErrors,
   ImageRepository,
   ObtenerRestauranteDto,
+  ObtnerReservaDto,
+  ObtnerReservaRestauranteDto,
   RechazarReservaDto,
   ReservaRepository,
   RestauranteRepository,
@@ -17,6 +19,7 @@ import {
 import {
   ActualizarRestaurante,
   CalificarRestuarante,
+  ObtenerReservasRestaurante,
   ObtenerRestaurantePorId,
   ObtenerRestaurantes
 } from '../../domain/use-case/restaurante'
@@ -112,6 +115,30 @@ export class RestauranteController {
       res.json(restaurante)
     } catch (error) {
       await this.transationManager.abort(session)
+      next(error)
+    }
+  }
+
+  obtenerReservas = async (req: Request, res: Response, next: NextFunction) => {
+    const usuario = req.body.usuarioToken
+    const restaurante_id = req.params?.id
+    const usuario_rol_id = usuario?.usuario_rol_id
+    const { query = {} } = req
+
+    try {
+      if (restaurante_id?.toString() != usuario_rol_id?.toString())
+        throw CustomErrors.badRequest(
+          'El usuario no se encuentra autorizado para consultar esta informacion'
+        )
+
+      const obtenerReservasDto = ObtnerReservaRestauranteDto.crear({ restaurante_id, query })
+      const reservas = await new ObtenerReservasRestaurante(
+        this.reservaRepository,
+        this.restauranteRepository
+      ).execute(obtenerReservasDto)
+
+      res.json(reservas)
+    } catch (error) {
       next(error)
     }
   }

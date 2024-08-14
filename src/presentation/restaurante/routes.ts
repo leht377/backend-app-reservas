@@ -50,6 +50,12 @@ export class RestauranteRoutes {
     )
 
     router.get('/', controller.obtenerRestaurantes)
+
+    router.get(
+      '/:id/reservas',
+      [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.RESTAURANTE])],
+      controller.obtenerReservas
+    )
     return router
   }
 }
