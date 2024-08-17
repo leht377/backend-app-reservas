@@ -43,6 +43,14 @@ export class RestauranteRoutes {
 
     router.get('/:id', controller.obtenerRestaurantePorId)
     router.put('/:id', AuthMiddleware.ValidateJWT, controller.actualizarRestaurante)
+    router.put(
+      '/:id/instalaciones',
+      AuthMiddleware.ValidateJWT,
+      AuthMiddleware.validateUserRole([UsuarioRol.RESTAURANTE]),
+      controller.uploadFotoIntalacion
+    )
+    // router.delete('/:id/instalaciones/:id_foto', AuthMiddleware.ValidateJWT, controller.actualizarRestaurante)
+
     router.post(
       '/:id/calificar',
       [AuthMiddleware.ValidateJWT, AuthMiddleware.validateUserRole([UsuarioRol.CLIENTE])],

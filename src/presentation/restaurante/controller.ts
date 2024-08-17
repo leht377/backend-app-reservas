@@ -13,6 +13,7 @@ import {
   ReservaRepository,
   RestauranteRepository,
   TransationManager,
+  UploadFotoIntalacionDto,
   UploadImageDto,
   filesObject
 } from '../../domain'
@@ -21,7 +22,8 @@ import {
   CalificarRestuarante,
   ObtenerReservasRestaurante,
   ObtenerRestaurantePorId,
-  ObtenerRestaurantes
+  ObtenerRestaurantes,
+  UploadFotoIntalacion
 } from '../../domain/use-case/restaurante'
 import { limpiarFiles } from '../../common/utils/cleanTempFiles'
 
@@ -140,6 +142,41 @@ export class RestauranteController {
       res.json(reservas)
     } catch (error) {
       next(error)
+    }
+  }
+
+  uploadFotoIntalacion = async (req: Request, res: Response, next: NextFunction) => {
+    const restaurante_id = req.params?.id
+    const usuario_id = req.body?.usuarioToken?.usuario_rol_id
+    let foto_intalacion
+
+    try {
+      if (restaurante_id?.toString() != usuario_id?.toString()) {
+        throw CustomErrors.badRequest('No cuentas con permiso para modificar esta informacion')
+      }
+
+      if (!req.files) throw CustomErrors.badRequest('Es necesaria la foto a cargar')
+
+      const files = fileObjectGenerator(req.files!)
+      if (files.length > 1) throw CustomErrors.badRequest('Unicamente se puede subir una foto ')
+      const uploadImageDto = UploadImageDto.crear(files)
+      const urlImagenes = await new UploadImage(this.imageRepository).execute(uploadImageDto)
+      foto_intalacion = urlImagenes[0]
+
+      const actualizarRestauranteDto = UploadFotoIntalacionDto.crear({
+        restaurante_id: restaurante_id,
+        url_foto_instalacion: foto_intalacion
+      })
+
+      const restaurante = await new UploadFotoIntalacion(this.restauranteRepository).execute(
+        actualizarRestauranteDto
+      )
+
+      res.json(restaurante)
+    } catch (error) {
+      next(error)
+    } finally {
+      if (req.files) limpiarFiles(req?.files)
     }
   }
 }

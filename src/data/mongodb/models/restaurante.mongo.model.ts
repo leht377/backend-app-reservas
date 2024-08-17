@@ -2,6 +2,14 @@ import mongoose, { Schema, Types, Document } from 'mongoose'
 import { HorasServicioRestaurante, DiasServicioRestaurante } from '../../../common/utils'
 import paginate from 'mongoose-paginate-v2'
 
+interface FotoInstalacionDocument extends Document {
+  uri: string
+}
+
+const fotoInstalacionSchema = new Schema<FotoInstalacionDocument>({
+  uri: { type: String, required: true }
+})
+
 interface RestauranteDocument extends Document {
   usuario_id: Types.ObjectId
   menu_id?: Types.ObjectId
@@ -15,7 +23,7 @@ interface RestauranteDocument extends Document {
   horas_servicio?: HorasServicioRestaurante[]
   dias_servicio?: DiasServicioRestaurante[]
   url_fotos_restaurantes?: string[]
-  url_fotos_instalacciones?: string[]
+  url_fotos_instalacciones?: FotoInstalacionDocument[]
   fechas_bloqueadas_reservas?: Date[]
 }
 
@@ -29,7 +37,7 @@ const restauranteSchema = new Schema<RestauranteDocument>({
   calificacion: { type: Number, default: 0 },
   cantidad_resenas: { type: Number, default: 0 },
   calificacion_promedio: { type: Number, default: 0 },
-  url_fotos_instalacciones: { type: [{ type: String }] },
+  url_fotos_instalacciones: { type: [{ type: fotoInstalacionSchema }] },
   url_fotos_restaurantes: { type: [{ type: String }] },
   horas_servicio: {
     type: [{ type: String, enum: Object.values(HorasServicioRestaurante) }]
