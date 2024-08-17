@@ -5,6 +5,7 @@ import {
   CalificacionRepository,
   CalificarRestuaranteDto,
   CustomErrors,
+  DeleteFotoIntalacionDto,
   ImageRepository,
   ObtenerRestauranteDto,
   ObtnerReservaDto,
@@ -20,6 +21,7 @@ import {
 import {
   ActualizarRestaurante,
   CalificarRestuarante,
+  DeleteFotoIntalacion,
   ObtenerReservasRestaurante,
   ObtenerRestaurantePorId,
   ObtenerRestaurantes,
@@ -170,6 +172,33 @@ export class RestauranteController {
 
       const restaurante = await new UploadFotoIntalacion(this.restauranteRepository).execute(
         actualizarRestauranteDto
+      )
+
+      res.json(restaurante)
+    } catch (error) {
+      next(error)
+    } finally {
+      if (req.files) limpiarFiles(req?.files)
+    }
+  }
+
+  deleteFotoIntalacion = async (req: Request, res: Response, next: NextFunction) => {
+    const restaurante_id = req.params?.id
+    const usuario_id = req.body?.usuarioToken?.usuario_rol_id
+    const foto_id = req.params?.foto_id
+
+    try {
+      if (restaurante_id?.toString() != usuario_id?.toString()) {
+        throw CustomErrors.badRequest('No cuentas con permiso para modificar esta informacion')
+      }
+
+      const deleteFotoIntalacionDto = DeleteFotoIntalacionDto.crear({
+        restaurante_id: restaurante_id,
+        foto_id: foto_id
+      })
+
+      const restaurante = await new DeleteFotoIntalacion(this.restauranteRepository).execute(
+        deleteFotoIntalacionDto
       )
 
       res.json(restaurante)

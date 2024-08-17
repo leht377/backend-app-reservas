@@ -1,4 +1,4 @@
-import { ActualizarRestauranteDto, UploadFotoIntalacionDto } from '../dtos'
+import { ActualizarRestauranteDto, DeleteFotoIntalacionDto, UploadFotoIntalacionDto } from '../dtos'
 import { ObtenerRestauranteDto } from '../dtos/restaurante/obtener-restaurantes.dto'
 import { RegistrarRestauranteDto } from '../dtos/restaurante/registrar-restaurante.dto'
 import { RestauranteDetalladoEntity, RestauranteEntity } from '../entities'
@@ -28,5 +28,9 @@ export abstract class RestauranteRepository {
 
   abstract uploadFotoInstalacion(
     uploadFotoIntalacionDto: UploadFotoIntalacionDto
+  ): Promise<RestauranteDetalladoEntity>
+
+  abstract deletefotoInstalacion(
+    deleteFotoIntalacionDto: DeleteFotoIntalacionDto
   ): Promise<RestauranteDetalladoEntity>
 }

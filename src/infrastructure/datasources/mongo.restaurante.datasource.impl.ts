@@ -2,6 +2,7 @@ import mongoose, { ClientSession, PaginateOptions, UpdateQuery, isValidObjectId 
 import {
   ActualizarRestauranteDto,
   CustomErrors,
+  DeleteFotoIntalacionDto,
   OptionsActualizarRestaurante,
   OptionsRegistrarRestaurante,
   RestauranteDataSource,
@@ -17,6 +18,40 @@ import { RestauranteMapper } from '../mappers'
 import { ObtenerRestauranteDto } from '../../domain/dtos/restaurante/obtener-restaurantes.dto'
 
 export class MongoRestauranteDataSourceImpl implements RestauranteDataSource {
+  async deletefotoInstalacion(
+    deleteFotoIntalacionDto: DeleteFotoIntalacionDto
+  ): Promise<RestauranteDetalladoEntity> {
+    const { foto_id, restaurante_id } = deleteFotoIntalacionDto
+    if (!isValidObjectId(restaurante_id))
+      throw CustomErrors.badRequest('El id del restaurante no es valido')
+
+    try {
+      let restauranteActualizado
+      const data: UpdateQuery<RestauranteDocument> = {
+        $pull: { url_fotos_instalacciones: { _id: foto_id } }
+      }
+      const options = { new: true, runValidators: true }
+
+      restauranteActualizado = await RestuaranteModelo.findByIdAndUpdate(
+        restaurante_id,
+        data,
+        options
+      ).populate('usuario_id')
+
+      if (!restauranteActualizado)
+        throw CustomErrors.badRequest(
+          `No existe ningun restaurante identificado con el id: ${restaurante_id}`
+        )
+
+      return RestauranteMapper.RestauranteDetalladoEntityFromObject(
+        restauranteActualizado?.toObject()
+      )
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError)
+        throw CustomErrors.badRequest(error.message)
+      throw error
+    }
+  }
   async uploadFotoInstalacion(
     uploadFotoIntalacionDto: UploadFotoIntalacionDto
   ): Promise<RestauranteDetalladoEntity> {

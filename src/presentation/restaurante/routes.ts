@@ -49,7 +49,12 @@ export class RestauranteRoutes {
       AuthMiddleware.validateUserRole([UsuarioRol.RESTAURANTE]),
       controller.uploadFotoIntalacion
     )
-    // router.delete('/:id/instalaciones/:id_foto', AuthMiddleware.ValidateJWT, controller.actualizarRestaurante)
+    router.delete(
+      '/:id/instalaciones/:foto_id',
+      AuthMiddleware.ValidateJWT,
+      AuthMiddleware.validateUserRole([UsuarioRol.RESTAURANTE]),
+      controller.deleteFotoIntalacion
+    )
 
     router.post(
       '/:id/calificar',

@@ -1,6 +1,6 @@
 import { UploadFotoIntalacionDto } from '../../dtos'
-import { RegistrarRestauranteDto } from '../../dtos/restaurante/registrar-restaurante.dto'
-import { RestauranteDetalladoEntity, RestauranteEntity } from '../../entities'
+
+import { RestauranteDetalladoEntity } from '../../entities'
 import { CustomErrors } from '../../errors'
 import { RestauranteRepository } from '../../repositories'
 

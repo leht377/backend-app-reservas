@@ -1,5 +1,6 @@
 import {
   ActualizarRestauranteDto,
+  DeleteFotoIntalacionDto,
   OptionsActualizarRestaurante,
   RestauranteDataSource,
   RestauranteDetalladoEntity,
@@ -13,6 +14,11 @@ import { RegistrarRestauranteDto } from '../../domain/dtos/restaurante/registrar
 
 export class RestauranteRepositoryImpl implements RestauranteRepository {
   constructor(private readonly restauranteDataSource: RestauranteDataSource) {}
+  deletefotoInstalacion(
+    deleteFotoIntalacionDto: DeleteFotoIntalacionDto
+  ): Promise<RestauranteDetalladoEntity> {
+    return this.restauranteDataSource.deletefotoInstalacion(deleteFotoIntalacionDto)
+  }
   uploadFotoInstalacion(
     uploadFotoIntalacionDto: UploadFotoIntalacionDto
   ): Promise<RestauranteDetalladoEntity> {
