@@ -3,9 +3,11 @@ import { MenuController } from './controller'
 import {
   MongoMenuDatasourceImpl,
   MongoPlatoDatasourceImpl,
-  MongoRestauranteDataSourceImpl
+  MongoRestauranteDataSourceImpl,
+  S3ImageDatasourceImpl
 } from '../../infrastructure/datasources'
 import {
+  ImageRepositoryImpl,
   MenuRepositoryImpl,
   PlatoRepositoryImpl,
   RestauranteRepositoryImpl
@@ -28,11 +30,14 @@ export class MenuRoutes {
     const platoDatasource = new MongoPlatoDatasourceImpl()
     const platoRepository = new PlatoRepositoryImpl(platoDatasource)
 
+    const imageDatasource = new S3ImageDatasourceImpl()
+    const imageRepository = new ImageRepositoryImpl(imageDatasource)
     const controller = new MenuController(
       menuRepository,
       restauranteRepository,
       platoRepository,
-      transationManager
+      transationManager,
+      imageRepository
     )
     router.post('/', AuthMiddleware.ValidateJWT, controller.registrarMenu)
     router.post('/:id/platos', AuthMiddleware.ValidateJWT, controller.registrarPlato)

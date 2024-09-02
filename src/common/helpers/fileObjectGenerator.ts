@@ -13,14 +13,16 @@ export const fileObjectGenerator = (reqFiles: FileArray): filesObject[] => {
           const { name, tempFilePath } = f
           data.push({
             nombre: name,
-            tempFilePath: tempFilePath
+            tempFilePath: tempFilePath,
+            key
           })
         })
       } else {
         const { name, tempFilePath } = file
         data.push({
           nombre: name,
-          tempFilePath: tempFilePath
+          tempFilePath: tempFilePath,
+          key
         })
       }
     })
