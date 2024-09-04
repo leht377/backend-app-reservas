@@ -13,7 +13,7 @@ export class RegistrarPlatoDto {
     public readonly menu_id: string
   ) {}
   static crear(objecto: { [key: string]: any }): RegistrarPlatoDto {
-    const {
+    let {
       nombre,
       hashtags_ids,
       categorias_ids,
@@ -37,14 +37,38 @@ export class RegistrarPlatoDto {
         'El campo "restaurante_id" es requerido y debe ser una cadena de texto'
       )
     }
-    if (!hashtags_ids || !Array.isArray(hashtags_ids)) {
-      throw CustomErrors.badRequest('El campo "hashtags_ids" es requerido y debe ser un array')
+
+    // if (!hashtags_ids || !Array.isArray(hashtags_ids)) {
+    //   throw CustomErrors.badRequest('El campo "hashtags_ids" es requerido y debe ser un array')
+    // }
+
+    // // if (!categorias_ids || !Array.isArray(categorias_ids) || categorias_ids?.length < 1) {
+    // //   throw CustomErrors.badRequest(
+    // //     'El campo "categorias_ids" es requerido y debe contener al menos un elemento ser un array '
+    // //   )
+    // // }
+
+    if (categorias_ids && !Array.isArray(categorias_ids)) {
+      try {
+        categorias_ids = JSON.parse(categorias_ids)
+        if (!Array.isArray(categorias_ids)) {
+          throw CustomErrors.badRequest('Los categorias_ids deben ser un array de cadenas de texto')
+        }
+      } catch (error) {
+        throw CustomErrors.badRequest('El formato de categorias_ids no es válido')
+      }
     }
-    if (!categorias_ids || !Array.isArray(categorias_ids) || categorias_ids?.length < 1) {
-      throw CustomErrors.badRequest(
-        'El campo "categorias_ids" es requerido y debe contener al menos un elemento ser un array '
-      )
+    if (hashtags_ids && !Array.isArray(hashtags_ids)) {
+      try {
+        hashtags_ids = JSON.parse(hashtags_ids)
+        if (!Array.isArray(hashtags_ids)) {
+          throw CustomErrors.badRequest('Los hashtags_ids deben ser un array de cadenas de texto')
+        }
+      } catch (error) {
+        throw CustomErrors.badRequest('El formato de hashtags_ids no es válido')
+      }
     }
+
     if (!descripcion || typeof descripcion !== 'string') {
       throw CustomErrors.badRequest(
         'El campo "descripcion" es requerido y debe ser una cadena de texto'
