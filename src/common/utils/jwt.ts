@@ -18,7 +18,7 @@ export class JwtAdapter {
   }
   static async generateRefreshToken(
     payload: TokenPayload,
-    duration: string = '1d'
+    duration: string = '60d'
   ): Promise<string | null> {
     return new Promise((resolve) => {
       jwt.sign(payload, JWT_SEEDREFRESH, { expiresIn: duration }, (err, token) => {

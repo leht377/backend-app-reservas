@@ -4,6 +4,7 @@ export class SolicitarReservaDto {
   private constructor(
     public readonly restaurante_id: string,
     public readonly cliente_id: string,
+    public readonly platos_ids: string[],
     public readonly nombre_reservante: string,
     public readonly fecha_reserva: Date,
     public readonly hora_reserva: string,
@@ -11,14 +12,15 @@ export class SolicitarReservaDto {
     public readonly usuario_id_token: string
   ) {}
   static crear(object: { [key: string]: any }): SolicitarReservaDto {
-    const {
+    let {
       restaurante_id,
       cliente_id,
       nombre_reservante,
       fecha_reserva,
       hora_reserva,
       usuario_id_token,
-      cantidad_personas
+      cantidad_personas,
+      platos_ids
     } = object
     if (!restaurante_id || typeof restaurante_id !== 'string') {
       throw CustomErrors.badRequest(
@@ -30,6 +32,17 @@ export class SolicitarReservaDto {
       throw CustomErrors.badRequest(
         'El campo "cliente_id" es requerido y debe ser una cadena de texto'
       )
+    }
+    if (!platos_ids) throw CustomErrors.badRequest('Los platos_id son requeridos')
+    if (platos_ids && !Array.isArray(platos_ids)) {
+      try {
+        platos_ids = JSON.parse(platos_ids)
+        if (!Array.isArray(platos_ids)) {
+          throw CustomErrors.badRequest('Los platos_ids deben ser un array de cadenas de texto')
+        }
+      } catch (error) {
+        throw CustomErrors.badRequest('El formato de categorias_ids no es válido')
+      }
     }
 
     if (!nombre_reservante || typeof nombre_reservante !== 'string') {
@@ -48,7 +61,7 @@ export class SolicitarReservaDto {
     if (isNaN(fechaReservaDate.getTime())) {
       throw CustomErrors.badRequest('El campo "fecha_reserva" debe ser una fecha válida')
     }
-
+    console.log(platos_ids)
     // Convertir la cadena de hora en objeto Date
     // const horaReservaDate = new Date(hora_reserva)
     // if (isNaN(horaReservaDate.getTime())) {
@@ -58,6 +71,7 @@ export class SolicitarReservaDto {
     return new SolicitarReservaDto(
       restaurante_id,
       cliente_id,
+      platos_ids,
       nombre_reservante,
       fecha_reserva,
       hora_reserva,

@@ -4,6 +4,7 @@ import { EstadoReserva } from '../../../common/utils'
 interface ReservaDocument extends Document {
   restaurante_id: Types.ObjectId
   cliente_id: Types.ObjectId
+  platos_id: Types.ObjectId[]
   nombre_reservante: string
   cantidad_personas: number
   estado: EstadoReserva
@@ -24,7 +25,12 @@ const reservaSchema = new Schema<ReservaDocument>({
     ref: 'Cliente',
     required: true
   },
-
+  
+  platos_id: {
+    type: [{ type: Schema.ObjectId, ref: 'Plato', required: true }],
+    required: true
+  },
+  
   nombre_reservante: {
     type: String,
     required: true,

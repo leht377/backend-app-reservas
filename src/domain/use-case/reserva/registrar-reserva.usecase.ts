@@ -30,7 +30,7 @@ export class RegistrarReserva {
       )
 
     const reserva = await this.reservaRepository.registrarReserva(solicitarReservaDto)
-
+  
     await new SentEmail(this.emailRepository).execute(
       cliente.getCorreo,
       AsuntoEmailReservas.PEDIENTE,

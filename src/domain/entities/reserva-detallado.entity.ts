@@ -1,4 +1,5 @@
 import { EstadoReserva } from '../../common/utils'
+import { PlatoEntity } from './plato.entity'
 
 export class ReservaDetalladoEntity {
   constructor(
@@ -12,6 +13,7 @@ export class ReservaDetalladoEntity {
     private readonly nombre_reservante: string,
     private readonly cantidad_personas: string,
     private readonly estado: EstadoReserva,
+    private readonly platos: PlatoEntity[],
     private readonly fecha_reserva: Date,
     private readonly hora_reserva: string,
     private readonly cod_ingreso?: string
@@ -23,6 +25,10 @@ export class ReservaDetalladoEntity {
 
   getClienteId(): string {
     return this.cliente_id
+  }
+  
+  getPlatos(): PlatoEntity[] {
+    return this.platos
   }
 
   getNombreCliente(): string {

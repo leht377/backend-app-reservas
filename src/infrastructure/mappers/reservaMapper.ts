@@ -1,4 +1,5 @@
 import { CustomErrors, ReservaDetalladoEntity, ReservaEntity } from '../../domain'
+import { PlatoMapper } from './platoMapper'
 
 export class ReservaMapper {
   static ReservaEntityFromObject(object: { [key: string]: any }): ReservaEntity {
@@ -12,7 +13,8 @@ export class ReservaMapper {
       estado,
       fecha_reserva,
       cod_ingreso,
-      hora_reserva
+      hora_reserva,
+      platos_id
     } = object
 
     const reserva_id = _id || id
@@ -27,9 +29,12 @@ export class ReservaMapper {
     if (!cantidad_personas)
       throw CustomErrors.internalServer('cantidad_personas de la reserva perdido')
     if (!hora_reserva) throw CustomErrors.internalServer('hora_reserva de la reserva perdido')
+    if (!Array.isArray(platos_id))
+      throw CustomErrors.internalServer('platos_id de la reserva perdido')
     return new ReservaEntity(
       reserva_id,
       cliente_id,
+      platos_id,
       restaurante_id,
       nombre_reservante,
       cantidad_personas,
@@ -51,7 +56,8 @@ export class ReservaMapper {
       estado,
       fecha_reserva,
       cod_ingreso,
-      hora_reserva
+      hora_reserva,
+      platos_id
     } = object
 
     const reserva_id = _id || id
@@ -80,6 +86,9 @@ export class ReservaMapper {
     if (!cantidad_personas)
       throw CustomErrors.internalServer('cantidad_personas de la reserva perdido')
     if (!hora_reserva) throw CustomErrors.internalServer('hora_reserva de la reserva perdido')
+    if (!Array.isArray(platos_id))
+      throw CustomErrors.internalServer('platos_id de la reserva perdido')
+    const plato = platos_id?.map((p) => PlatoMapper.PlatoEntityFromObject(p))
 
     return new ReservaDetalladoEntity(
       reserva_id,
@@ -92,6 +101,7 @@ export class ReservaMapper {
       nombre_reservante,
       cantidad_personas,
       estado,
+      plato,
       fecha_reserva,
       hora_reserva,
       cod_ingreso

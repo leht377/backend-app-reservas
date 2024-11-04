@@ -1,1 +1,1 @@
-export * from './registrar-plato.dto'
+export * from './registrar-plato.dto';

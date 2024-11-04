@@ -27,12 +27,16 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
       let queryReserva: mongoose.FilterQuery<ReservaDocument> = { restaurante_id: restaurante_id }
       if (estado) queryReserva = { restaurante_id, estado }
 
-      const reservas = await ReservaModel.find(queryReserva).populate([
-        'cliente_id',
-        'restaurante_id'
-      ])
+      const reservas = await ReservaModel.find(queryReserva)
+        .populate([
+          'cliente_id',
+          'restaurante_id',
+          { path: 'platos_id', populate: ['categoria_id', 'hashtag_id'] }
+        ])
+        .lean()
+
       return reservas?.map((reserva) =>
-        ReservaMapper.ReservaDetalladoEntityFromObject(reserva?.toObject())
+        ReservaMapper.ReservaDetalladoEntityFromObject(reserva)
       )
     } catch (error) {
       if (error instanceof mongoose.Error.ValidationError)
@@ -51,12 +55,16 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
       let queryReserva: mongoose.FilterQuery<ReservaDocument> = { cliente_id: cliente_id }
       if (estado) queryReserva = { cliente_id, estado }
 
-      const reservas = await ReservaModel.find(queryReserva).populate([
-        'cliente_id',
-        'restaurante_id'
-      ])
+      const reservas = await ReservaModel.find(queryReserva)
+        .populate([
+          'cliente_id',
+          'restaurante_id',
+          { path: 'platos_id', populate: ['categoria_id', 'hashtag_id'] }
+        ])
+        .lean()
+      // .populate([{ path: 'platos_ids', populate: ['categoria_id', 'hashtag_id'] }])
       return reservas?.map((reserva) =>
-        ReservaMapper.ReservaDetalladoEntityFromObject(reserva?.toObject())
+        ReservaMapper.ReservaDetalladoEntityFromObject(reserva)
       )
     } catch (error) {
       if (error instanceof mongoose.Error.ValidationError)
@@ -124,13 +132,20 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         fecha_reserva,
         hora_reserva,
         nombre_reservante,
-        restaurante_id
+        restaurante_id,
+        platos_ids
       } = solicitarReservaDto
 
       if (!isValidObjectId(cliente_id))
         throw CustomErrors.badRequest('El cliente_id no es un id valido')
       if (!isValidObjectId(restaurante_id))
         throw CustomErrors.badRequest('El restaurante_id no es un id valido')
+
+      platos_ids.map((pid) => {
+        if (!isValidObjectId(pid))
+          throw CustomErrors.badRequest('El plato_id no es un id valido')
+      })
+      
       // const code = generateCode()
       const reserva = new ReservaModel({
         cliente_id: cliente_id,
@@ -139,6 +154,7 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         nombre_reservante: nombre_reservante,
         cantidad_personas: cantidad_personas,
         restaurante_id: restaurante_id,
+        platos_id:platos_ids,
         cod_ingreso: generateCode()
       })
 

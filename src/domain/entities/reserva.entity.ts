@@ -4,6 +4,7 @@ export class ReservaEntity {
   constructor(
     private readonly id: string,
     private readonly cliente_id: string,
+    private readonly platos_id: string[],
     private readonly restaurante_id: string,
     private readonly nombre_reservante: string,
     private readonly cantidad_personas: string,
@@ -18,6 +19,9 @@ export class ReservaEntity {
   }
   getRestauranteId(): string {
     return this.restaurante_id
+  }
+  getPlatoId(): string[] {
+    return this.platos_id
   }
 
   getClienteId(): string {
