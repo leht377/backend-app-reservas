@@ -3,6 +3,7 @@ import { CustomErrors } from '../../domain'
 
 export class ErrorHandlerMiddleware {
   static ErrorHandler(error: unknown, req: Request, res: Response, next: NextFunction) {
+    console.log(error)
     if (error instanceof CustomErrors) {
       return res.status(error.statusCode).json({ error: error.message })
     }

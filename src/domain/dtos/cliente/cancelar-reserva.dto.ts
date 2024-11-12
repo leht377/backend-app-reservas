@@ -7,24 +7,35 @@ export class CancelarReservaDto {
     public readonly cliente_id: string,
     public readonly usuario_token_id: string,
     public readonly rol_usuario: string,
-    public readonly usuario_rol_id: string
+    public readonly usuario_rol_id: string,
+    public readonly motivo_rechazo?: string
   ) {}
 
   static crear(objecto: ObjectoGenerico): CancelarReservaDto {
-    const { reserva_id, cliente_id, usuario_token_id, rol_usuario, usuario_rol_id } = objecto
+    const {
+      reserva_id,
+      cliente_id,
+      usuario_token_id,
+      rol_usuario,
+      motivo_rechazo,
+      usuario_rol_id
+    } = objecto
 
     if (!reserva_id) throw CustomErrors.badRequest('El campo "reserva_id" es requerido')
     if (!cliente_id) throw CustomErrors.badRequest('El campo "cliente_id" es requerido')
     if (!usuario_token_id) throw CustomErrors.badRequest('El campo "usuario_token_id" es requerido')
     if (!rol_usuario) throw CustomErrors.badRequest('El campo "rol_usuario" es requerido')
     if (!usuario_rol_id) throw CustomErrors.badRequest('El campo "usuario_rol_id" es requerido')
+    if (motivo_rechazo && typeof motivo_rechazo != 'string')
+      throw CustomErrors.badRequest('El campo "motivo_rechazo" es requerido')
 
     return new CancelarReservaDto(
       reserva_id,
       cliente_id,
       usuario_token_id,
       rol_usuario,
-      usuario_rol_id
+      usuario_rol_id,
+      motivo_rechazo
     )
   }
 }

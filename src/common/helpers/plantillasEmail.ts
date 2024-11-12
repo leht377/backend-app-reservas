@@ -389,6 +389,10 @@ const plantilla_reserva_cancelada_cliente = (
                 <p style="font-size: 16px; color: #333333; margin: 10px 0;">
                     Lamentamos informarte que hemos recibido tu solicitud de cancelación para la reserva en <strong style="color: #e53935;">${restauranteInfo?.getNombre()}</strong>. La reserva ha sido cancelada con éxito.
                 </p>
+
+                <p style="font-size: 16px; color: #e53935; margin: 10px 0; font-weight: bold;">
+                 ${reservaInfo?.getMotivoRechazon()} <!-- Agrega aquí la variable o razón específica del rechazo -->
+                </p>
                 
                 <!-- Sección de datos básicos de la reserva -->
                 <table width="100%" cellpadding="10" cellspacing="0" style="margin: 20px 0; border: 1px solid #dddddd; border-radius: 4px; background-color: #f9f9f9;">

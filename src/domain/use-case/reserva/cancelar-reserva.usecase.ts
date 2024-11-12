@@ -23,13 +23,8 @@ export class CancelarReserva {
     const cliente_id = CancelarReservaDto.cliente_id
     const rol_usuario = CancelarReservaDto.rol_usuario
     const usuario_rol_id = CancelarReservaDto.usuario_rol_id
-
+    const motivio_rechazo = CancelarReservaDto?.motivo_rechazo
     const cliente = await new ObtenerClientePorId(this.clienteRepository).execute(cliente_id)
-
-    if (cliente.getUsuarioId().toString() != CancelarReservaDto.usuario_token_id?.toString())
-      throw CustomErrors.badRequest(
-        'El usuario no se encuntrar habilitado para cambiar la infomacion de esta reserva'
-      )
 
     const obtenerReservaPorIdDto = ObtenerReservaPorIdDto.crear({
       reserva_id,
@@ -41,25 +36,38 @@ export class CancelarReserva {
       obtenerReservaPorIdDto
     )
 
+    const restaurante = await new ObtenerRestaurantePorId(this.restauranteRepository).execute(
+      reserva?.getRestauranteId()
+    )
+
+    if (
+      cliente.getUsuarioId().toString() != CancelarReservaDto.usuario_token_id?.toString() &&
+      restaurante.getUsuarioId()?.toString() != CancelarReservaDto.usuario_token_id?.toString()
+    )
+      throw CustomErrors.badRequest(
+        'El usuario no se encuntrar habilitado para cambiar la infomacion de esta reserva'
+      )
+
     if (reserva?.getClienteId().toString() != cliente_id?.toString())
       throw CustomErrors.badRequest(
         'El restaurante no se encuentra autorizado para modificar esta reserva'
       )
 
-    if (reserva.getEstado() != EstadoReserva.PENDIENTE && reserva.getEstado() != EstadoReserva.ACEPTADA)
+    if (
+      reserva.getEstado() != EstadoReserva.PENDIENTE &&
+      reserva.getEstado() != EstadoReserva.ACEPTADA
+    )
       throw CustomErrors.badRequest(
         `La reserva ya se encuentra ${reserva.getEstado().toLocaleLowerCase()}`
       )
 
     const actualizarReservaDto = ActualizarReservaDto.crear({
       estado_reserva: EstadoReserva.CANCELADA,
-      reserva_id
+      reserva_id,
+      motivio_rechazo: motivio_rechazo
     })
 
     const reservaActualizada = await this.reservaRepository.actualizarReserva(actualizarReservaDto)
-    const restaurante = await new ObtenerRestaurantePorId(this.restauranteRepository).execute(
-      reservaActualizada?.getRestauranteId()
-    )
 
     await new SentEmail(this.emailRepository).execute(
       cliente.getCorreo,
@@ -69,6 +77,7 @@ export class CancelarReserva {
       restaurante,
       reservaActualizada
     )
+
     // await new SentEmail(this.emailRepository).execute(
     //   restaurante?.getCorreo(),
     //   AsuntoEmailReservas.CANCELADA,
