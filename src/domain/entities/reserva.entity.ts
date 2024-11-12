@@ -11,7 +11,8 @@ export class ReservaEntity {
     private readonly estado: EstadoReserva,
     private readonly fecha_reserva: Date,
     private readonly hora_reserva: string,
-    private readonly cod_ingreso?: string
+    private readonly cod_ingreso?: string,
+    private readonly motivo_de_rechazon?: string 
   ) {}
 
   getId(): string {
@@ -20,6 +21,11 @@ export class ReservaEntity {
   getRestauranteId(): string {
     return this.restaurante_id
   }
+  
+  getMotivoRechazon(): string | undefined{
+    return this.motivo_de_rechazon
+  }
+
   getPlatoId(): string[] {
     return this.platos_id
   }

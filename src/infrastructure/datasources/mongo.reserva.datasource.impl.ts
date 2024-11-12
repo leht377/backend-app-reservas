@@ -35,9 +35,7 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         ])
         .lean()
 
-      return reservas?.map((reserva) =>
-        ReservaMapper.ReservaDetalladoEntityFromObject(reserva)
-      )
+      return reservas?.map((reserva) => ReservaMapper.ReservaDetalladoEntityFromObject(reserva))
     } catch (error) {
       if (error instanceof mongoose.Error.ValidationError)
         throw CustomErrors.badRequest(error.message)
@@ -63,9 +61,7 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         ])
         .lean()
       // .populate([{ path: 'platos_ids', populate: ['categoria_id', 'hashtag_id'] }])
-      return reservas?.map((reserva) =>
-        ReservaMapper.ReservaDetalladoEntityFromObject(reserva)
-      )
+      return reservas?.map((reserva) => ReservaMapper.ReservaDetalladoEntityFromObject(reserva))
     } catch (error) {
       if (error instanceof mongoose.Error.ValidationError)
         throw CustomErrors.badRequest(error.message)
@@ -95,7 +91,8 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         fecha_reserva,
         hora_reserva,
         nombre_reservante,
-        codigo_ingreso
+        codigo_ingreso,
+        motivio_rechazo
       } = actualizarReservaDto
 
       if (!isValidObjectId(reserva_id))
@@ -106,14 +103,15 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         estado: estado_reserva,
         fecha_reserva: fecha_reserva,
         hora_reserva: hora_reserva,
-        nombre_reservante: nombre_reservante
+        nombre_reservante: nombre_reservante,
+        motivo_de_rechazon: motivio_rechazo
       }
 
       const reservaActualizada = await ReservaModel.findByIdAndUpdate(reserva_id, data, {
         runValidators: true,
         new: true
       })
-
+      
       if (!reservaActualizada)
         throw CustomErrors.badRequest(`No existe ninguna reserva asociado al id :${reserva_id}`)
 
@@ -142,10 +140,9 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         throw CustomErrors.badRequest('El restaurante_id no es un id valido')
 
       platos_ids.map((pid) => {
-        if (!isValidObjectId(pid))
-          throw CustomErrors.badRequest('El plato_id no es un id valido')
+        if (!isValidObjectId(pid)) throw CustomErrors.badRequest('El plato_id no es un id valido')
       })
-      
+
       // const code = generateCode()
       const reserva = new ReservaModel({
         cliente_id: cliente_id,
@@ -154,7 +151,7 @@ export class MongoReservaDatasourceImpl implements ReservaDatasource {
         nombre_reservante: nombre_reservante,
         cantidad_personas: cantidad_personas,
         restaurante_id: restaurante_id,
-        platos_id:platos_ids,
+        platos_id: platos_ids,
         cod_ingreso: generateCode()
       })
 

@@ -7,6 +7,7 @@ interface ReservaDocument extends Document {
   platos_id: Types.ObjectId[]
   nombre_reservante: string
   cantidad_personas: number
+  motivo_de_rechazon: string | null
   estado: EstadoReserva
   fecha_reserva: Date
   hora_reserva: string
@@ -34,6 +35,12 @@ const reservaSchema = new Schema<ReservaDocument>({
   nombre_reservante: {
     type: String,
     required: true,
+    minlength: 5
+  },
+
+  motivo_de_rechazon: {
+    type: String,
+    required: false,
     minlength: 5
   },
 

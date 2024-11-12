@@ -33,7 +33,7 @@ export class SolicitarReservaDto {
         'El campo "cliente_id" es requerido y debe ser una cadena de texto'
       )
     }
-    if (!platos_ids) throw CustomErrors.badRequest('Los platos_id son requeridos')
+    if (!platos_ids) throw CustomErrors.badRequest('Los platos_ids son requeridos')
     if (platos_ids && !Array.isArray(platos_ids)) {
       try {
         platos_ids = JSON.parse(platos_ids)

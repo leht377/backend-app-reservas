@@ -9,7 +9,8 @@ export class ActualizarReservaDto {
     public readonly estado_reserva?: EstadoReserva,
     public readonly fecha_reserva?: Date,
     public readonly hora_reserva?: string,
-    public readonly codigo_ingreso?: string
+    public readonly codigo_ingreso?: string,
+    public readonly motivio_rechazo?: string,
   ) {}
 
   static crear(object: { [key: string]: any }): ActualizarReservaDto {
@@ -20,7 +21,8 @@ export class ActualizarReservaDto {
       estado_reserva,
       fecha_reserva,
       hora_reserva,
-      codigo_ingreso
+      codigo_ingreso,
+      motivio_rechazo
     } = object
 
     let cantidad_personas_number
@@ -30,6 +32,11 @@ export class ActualizarReservaDto {
     if (!reserva_id || typeof reserva_id !== 'string')
       throw CustomErrors.badRequest(
         'El campo "reserva_id" es obligatorio y debe ser una cadena de texto'
+      )
+
+    if (motivio_rechazo && typeof motivio_rechazo !== 'string')
+      throw CustomErrors.badRequest(
+        'El campo "motivio_rechazo" es obligatorio y debe ser una cadena de texto'
       )
 
     if (nombre_reservante && typeof nombre_reservante !== 'string') {
@@ -65,7 +72,8 @@ export class ActualizarReservaDto {
       estado_reserva,
       fechaReservaDate,
       horaReservaDate,
-      codigo_ingreso
+      codigo_ingreso,
+      motivio_rechazo
     )
   }
 }

@@ -21,7 +21,7 @@ export class MailerEmailDataSourceImpl implements EmailDatasource {
 
     try {
       const info = await transporter.sendMail(mailOptions)
-      console.log('Correo electrónico enviado: ' + info)
+      // console.log('Correo electrónico enviado: ' + info)
       return true
     } catch (error) {
       console.log('error: ' + error)

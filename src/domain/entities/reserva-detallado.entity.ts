@@ -16,7 +16,8 @@ export class ReservaDetalladoEntity {
     private readonly platos: PlatoEntity[],
     private readonly fecha_reserva: Date,
     private readonly hora_reserva: string,
-    private readonly cod_ingreso?: string
+    private readonly cod_ingreso?: string,
+    private readonly motivo_de_rechazon?: string 
   ) {}
 
   getId(): string {
@@ -30,6 +31,12 @@ export class ReservaDetalladoEntity {
   getPlatos(): PlatoEntity[] {
     return this.platos
   }
+
+  
+  getMotivoRechazon(): string | undefined{
+    return this.motivo_de_rechazon
+  }
+
 
   getNombreCliente(): string {
     return this.nombre_cliente

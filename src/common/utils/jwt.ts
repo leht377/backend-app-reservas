@@ -10,7 +10,7 @@ export class JwtAdapter {
     duration: string = '2h'
   ): Promise<string | null> {
     return new Promise((resolve) => {
-      jwt.sign(payload, JWT_SEED, { expiresIn: duration }, (err, token) => {
+      jwt.sign(payload, JWT_SEED, { }, (err, token) => {
         if (err) return resolve(null)
         resolve(token!)
       })

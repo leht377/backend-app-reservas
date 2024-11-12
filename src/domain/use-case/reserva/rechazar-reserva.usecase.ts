@@ -23,6 +23,7 @@ export class RechazarReserva {
     const restaurante_id = rechazarReservaDto.restaurante_id
     const rol_usuario = rechazarReservaDto.rol_usuario
     const usuario_rol_id = rechazarReservaDto.usuario_rol_id
+    const motivio_rechazo = rechazarReservaDto.motivo_rechazo
 
     const restaurante = await new ObtenerRestaurantePorId(this.restauranteRepository).execute(
       restaurante_id
@@ -55,9 +56,10 @@ export class RechazarReserva {
 
     const actualizarReservaDto = ActualizarReservaDto.crear({
       estado_reserva: EstadoReserva.RECHAZADA,
-      reserva_id
+      reserva_id,
+      motivio_rechazo: motivio_rechazo
     })
-
+  
     const reservaActualizada = await this.reservaRepository.actualizarReserva(actualizarReservaDto)
 
     const cliente = await new ObtenerClientePorId(this.clienteRepository).execute(

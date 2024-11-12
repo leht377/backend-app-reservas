@@ -14,7 +14,8 @@ export class ReservaMapper {
       fecha_reserva,
       cod_ingreso,
       hora_reserva,
-      platos_id
+      platos_id,
+      motivo_de_rechazon
     } = object
 
     const reserva_id = _id || id
@@ -41,7 +42,8 @@ export class ReservaMapper {
       estado,
       fecha_reserva,
       hora_reserva,
-      cod_ingreso
+      cod_ingreso,
+      motivo_de_rechazon
     )
   }
 
@@ -57,7 +59,8 @@ export class ReservaMapper {
       fecha_reserva,
       cod_ingreso,
       hora_reserva,
-      platos_id
+      platos_id,
+      motivo_de_rechazon
     } = object
 
     const reserva_id = _id || id
@@ -104,7 +107,8 @@ export class ReservaMapper {
       plato,
       fecha_reserva,
       hora_reserva,
-      cod_ingreso
+      cod_ingreso,
+      motivo_de_rechazon
     )
   }
 }
