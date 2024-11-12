@@ -46,7 +46,7 @@ export class CancelarReserva {
         'El restaurante no se encuentra autorizado para modificar esta reserva'
       )
 
-    if (reserva.getEstado() != EstadoReserva.PENDIENTE)
+    if (reserva.getEstado() != EstadoReserva.PENDIENTE && reserva.getEstado() != EstadoReserva.ACEPTADA)
       throw CustomErrors.badRequest(
         `La reserva ya se encuentra ${reserva.getEstado().toLocaleLowerCase()}`
       )
